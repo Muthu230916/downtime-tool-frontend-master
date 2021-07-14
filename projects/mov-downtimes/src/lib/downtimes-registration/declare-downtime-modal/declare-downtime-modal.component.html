@@ -1,0 +1,88 @@
+<h1 mat-dialog-title>
+	<mat-icon class="home" (click)="home()">home</mat-icon>
+	<lib-downtimes-breadcrumbs
+		[lastBreadcrumbName$]="activeActivityName$"
+		[breadcrumbs]="allActivities"
+		(onBreadcrumbClick)="onActivityClick($event)"
+	></lib-downtimes-breadcrumbs>
+</h1>
+<div mat-dialog-content>
+	<div *ngIf="showActivities">
+		<mat-card
+			*ngFor="let activity of activitiesToShow"
+			class="activity-card"
+			[ngStyle]="{ 'background-color': activity.color }"
+			[style.color]="activity.textColor"
+			(click)="onActivityClick(activity)"
+			>{{ activity.name }}</mat-card
+		>
+	</div>
+	<div *ngIf="!showActivities" class="inputs-wrapper">
+		<div class="select-input">
+			<mat-form-field *ngIf="locations">
+				<mat-label>{{ "LIB_DOWNTIMES_LOCATIONS" | translate }}</mat-label>
+				<mat-select [(ngModel)]="selectedLocationId">
+					<mat-option>{{ "LIB_DOWNTIMES_SELECT_LOCATION" | translate }}</mat-option>
+					<mat-option *ngFor="let location of locations" [value]="location.uiid">{{
+						location.name
+					}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="select-input">
+			<mat-form-field *ngIf="causes">
+				<mat-label>{{ "LIB_DOWNTIMES_CAUSES" | translate }}</mat-label>
+				<mat-select [(ngModel)]="selectedCauseId" [required]="requiresCause()">
+					<mat-option>{{ "LIB_DOWNTIMES_SELECT_CAUSE" | translate }}</mat-option>
+					<mat-option *ngFor="let cause of causes" [value]="cause.uiid">{{
+						cause.name
+					}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="select-input">
+			<mat-form-field *ngIf="solutions">
+				<mat-label>{{ "LIB_DOWNTIMES_SOLUTIONS" | translate }}</mat-label>
+				<mat-select [(ngModel)]="selectedSolutionId" [required]="requiresSolution()">
+					<mat-option>{{ "LIB_DOWNTIMES_SELECT_SOLUTION" | translate }}</mat-option>
+					<mat-option *ngFor="let solution of solutions" [value]="solution.uiid">{{
+						solution.name
+					}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="select-input">
+			<mat-form-field *ngIf="teams">
+				<mat-label>{{ "LIB_DOWNTIMES_TEAMS" | translate }}</mat-label>
+				<mat-select [(ngModel)]="selectedTeamId">
+					<mat-option>{{ "LIB_DOWNTIMES_SELECT_TEAMS" | translate }}</mat-option>
+					<mat-option *ngFor="let team of teams" [value]="team.uiid">{{
+						team.name
+					}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<!-- <div class="remarks">
+			<mat-form-field>
+				<textarea
+					matInput
+					[(ngModel)]="comment"
+					placeholder="{{ 'LIB_DOWNTIMES_REMARKS' | translate }}"
+				></textarea>
+			</mat-form-field>
+		</div> -->
+	</div>
+</div>
+<div mat-dialog-actions>
+	<button mat-raised-button (click)="onNoClick()">
+		{{ "LIB_DOWNTIMES_CANCEL" | translate }}
+	</button>
+	<button
+		mat-raised-button
+		color="primary"
+		(click)="save()"
+		[disabled]="showActivities || !canSave()"
+	>
+		{{ "LIB_DOWNTIMES_SAVE" | translate }}
+	</button>
+</div>

@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+
+<div mat-dialog-content>
+	<div class="fullWidth centerItems">
+		<mat-form-field style="width: 100%;">
+			<input matInput [(ngModel)]="name" placeholder="Name" />
+		</mat-form-field>
+		<mat-button-toggle-group #group="matButtonToggleGroup">
+			<mat-button-toggle
+				value="personal"
+				[checked]="!shared"
+				(change)="shared = !$event.source.checked"
+			>
+				Personal
+			</mat-button-toggle>
+			<mat-button-toggle
+				value="global"
+				[checked]="shared"
+				(change)="shared = $event.source.checked"
+			>
+				Public
+			</mat-button-toggle>
+		</mat-button-toggle-group>
+	</div>
+</div>
+
+<div mat-dialog-actions class="mainmodalbuttons">
+	<button mat-button (click)="onCancel()">Cancel</button>
+	<button mat-button (click)="save()" cdkFocusInitial>Save</button>
+</div>

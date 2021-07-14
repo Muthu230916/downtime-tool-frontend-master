@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+
+<div mat-dialog-content>
+	<div *ngFor="let localization of model.data" class="localizationitem">
+		<div>
+			<mat-form-field>
+				<input
+					matInput
+					[(ngModel)]="localization.name"
+					placeholder="{{ 'LIB_DOWNTIMES_TITLE' | translate }}"
+				/>
+			</mat-form-field>
+		</div>
+		<div>
+			<mat-form-field>
+				<mat-label>{{ "LIB_DOWNTIMES_LANGUAGE" | translate }}</mat-label>
+				<mat-select [(ngModel)]="localization.languageId">
+					<mat-option [value]=""></mat-option>
+					<mat-option *ngFor="let langCode of languageCodes" [value]="langCode.code">
+						{{ langCode.name }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+	</div>
+	<div class="modaladvancedbuttons">
+		<button mat-button (click)="addLocalization()">
+			{{ "LIB_DOWNTIMES_ADD_LOCALIZATION" | translate }}
+		</button>
+	</div>
+</div>
+
+<div mat-dialog-actions class="mainmodalbuttons">
+	<button mat-button (click)="onCancel()">{{ "LIB_DOWNTIMES_CANCEL" | translate }}</button>
+	<button mat-button [mat-dialog-close]="model" cdkFocusInitial>
+		{{ "LIB_DOWNTIMES_SAVE" | translate }}
+	</button>
+</div>

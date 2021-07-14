@@ -1,0 +1,31 @@
+.activity-card {
+	margin: 5px;
+	display: inline-block;
+	width: 250px;
+	padding: 30px;
+	cursor: pointer;
+}
+
+.home {
+	cursor: pointer;
+	font-size: 1em;
+}
+
+.select-input {
+	display: inline-block;
+	width: 25%;
+}
+
+.remarks {
+	margin-top: 20px;
+	width: 90%;
+}
+
+.remarks > .mat-form-field {
+	display: block;
+}
+
+.inputs-wrapper {
+	margin-left: 20px;
+	margin-top: 30px;
+}

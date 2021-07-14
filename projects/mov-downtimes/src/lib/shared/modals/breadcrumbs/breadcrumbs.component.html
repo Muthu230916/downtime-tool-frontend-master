@@ -1,0 +1,15 @@
+<div class="breadcrumb-wrapper">
+	<div
+		class="all-breadcrumb"
+		*ngFor="let breadcrumb of breadcrumbsToShow; let i = index"
+		(click)="i < breadcrumbsToShow.length - 1 && breadcrumbClick(breadcrumb)"
+	>
+		<mat-icon *ngIf="i > 0">arrow_forward_ios</mat-icon>
+		<span
+			class="downtime-breadcrumb"
+			[ngStyle]="{ background: breadcrumb.color }"
+			[style.color]="breadcrumb.textColor"
+			>{{ breadcrumb.name }}</span
+		>
+	</div>
+</div>

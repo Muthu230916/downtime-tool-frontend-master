@@ -1,0 +1,315 @@
+<div
+	class="contentwrapper"
+	fxLayout="row"
+	fxLayoutAlign="space-evenly stretch"
+	style="height: auto;"
+>
+	<div fxFlex="53">
+		<div class="formarea mat-elevation-z8">
+			<mat-form-field class="equipmentsSelectionContainer">
+				<mat-chip-list
+					#chipList
+					aria-label="Equipment selection"
+					(click)="equipmentsSelectionControl.patchValue(undefined)"
+				>
+					<mat-chip
+						*ngFor="let eq of searchModel.equipmentsSelected"
+						[selectable]="false"
+						[removable]="true"
+						(removed)="removeEquipmentFromSelection(eq)"
+					>
+						<div [@enter]>
+							{{ eq.id }}
+						</div>
+						<mat-icon matChipRemove>cancel</mat-icon>
+					</mat-chip>
+					<input
+						placeholder="{{ 'LIB_DOWNTIMES_EQUIPMENTS' | translate }} ..."
+						#fruitInput
+						[formControl]="equipmentsSelectionControl"
+						[matAutocomplete]="auto"
+						[matChipInputFor]="chipList"
+					/>
+				</mat-chip-list>
+				<mat-autocomplete
+					#auto="matAutocomplete"
+					(optionSelected)="addEquipmentToSelection($event.option)"
+				>
+					<div *ngFor="let eq of filteredEquipments$ | async">
+						<mat-option *ngIf="eq.id" [value]="eq" [@enter]>
+							{{ eq.id }}
+						</mat-option>
+					</div>
+				</mat-autocomplete>
+			</mat-form-field>
+		</div>
+	</div>
+	<div fxFlex="13">
+		<div
+			style="padding-top: 5%;"
+			class="fullWidth centerItems"
+			*ngIf="searchModel.equipmentsSelected.length === 0"
+			[@enter]
+		>
+			<h5>{{ "LIB_DOWNTIMES_SELECT_AT_LEAST_ONE_EQUIPMENT" | translate }}</h5>
+		</div>
+		<div
+			class="formarea mat-elevation-z8 centerItems"
+			*ngIf="searchModel.equipmentsSelected.length > 0"
+			[@enter]
+		>
+			<div fxLayout="column" fxLayoutAlign="space-evenly stretch" class="timeperiodcontainer">
+				<div fxFlex="50">
+					<mat-form-field class="datetimeinput">
+						<mat-label>{{ "LIB_DOWNTIMES_FROM" | translate }}</mat-label>
+						<input
+							matInput
+							type="text"
+							mwlFlatpickr
+							[(ngModel)]="searchModel.from"
+							[enableTime]="true"
+							[enableSeconds]="true"
+							[convertModelValue]="true"
+							[altInput]="true"
+							[maxDate]="'today'"
+							[altInputClass]="'input-datetime'"
+					/></mat-form-field>
+				</div>
+				<div fxFlex="50">
+					<mat-form-field class="datetimeinput">
+						<mat-label>{{ "LIB_DOWNTIMES_TO" | translate }}</mat-label>
+						<input
+							matInput
+							type="text"
+							mwlFlatpickr
+							[minDate]="searchModel.from"
+							[(ngModel)]="searchModel.to"
+							[convertModelValue]="true"
+							[enableTime]="true"
+							[enableSeconds]="true"
+							[altInput]="true"
+							[altInputClass]="'input-datetime'"
+					/></mat-form-field>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div fxFlex="32">
+		<div
+			style="padding-top: 5%;"
+			class="centerItems"
+			*ngIf="
+				searchModel.equipmentsSelected.length > 0 && (!searchModel.from || !searchModel.to)
+			"
+			[@enter]
+		>
+			<h5>{{ "LIB_DOWNTIMES_SELECT_TIME_PERIOD" | translate }}</h5>
+		</div>
+		<div
+			class="formarea mat-elevation-z8"
+			*ngIf="searchModel.equipmentsSelected.length > 0 && searchModel.from && searchModel.to"
+			[@enter]
+		>
+			<div
+				fxLayout="row"
+				fxLayoutAlign="space-evenly stretch"
+				class="thirdcolumnfiltersandbuttonscontainer"
+			>
+				<div fxFlex="50">
+					<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+						<div fxFlex="50">
+							<mat-slide-toggle
+								(change)="slideFilterValue(searchModel.showAll, 'all')"
+								[(ngModel)]="searchModel.showAll"
+								>{{ "LIB_DOWNTIMES_ALL" | translate }}</mat-slide-toggle
+							>
+						</div>
+						<div fxFlex="50">
+							<mat-slide-toggle
+								(change)="slideFilterValue(searchModel.showDeclared, 'declared')"
+								[(ngModel)]="searchModel.showDeclared"
+								>{{ "LIB_DOWNTIMES_DECLARED" | translate }}</mat-slide-toggle
+							>
+							<mat-slide-toggle
+								(change)="
+									slideFilterValue(searchModel.showUndeclared, 'undeclared')
+								"
+								[(ngModel)]="searchModel.showUndeclared"
+								>{{ "LIB_DOWNTIMES_UNDECLARED" | translate }}</mat-slide-toggle
+							>
+							<mat-slide-toggle
+								(change)="slideFilterValue(searchModel.showOngoing, 'ongoing')"
+								[(ngModel)]="searchModel.showOngoing"
+								>Ongoing</mat-slide-toggle
+							>
+							<mat-slide-toggle
+								(change)="
+									slideFilterValue(searchModel.showShortStop, 'showshortstop')
+								"
+								[(ngModel)]="searchModel.showShortStop"
+								>{{ "LIB_DOWNTIMES_SHOW_SHORT_STOP" | translate }}</mat-slide-toggle
+							>
+						</div>
+					</div>
+				</div>
+				<div fxFlex="50">
+					<div
+						fxLayout="column"
+						fxLayoutAlign="space-evenly stretch"
+						class="thirdcolumnbuttonscontainer"
+					>
+						<div fxFlex="45">
+							<button
+								*ngIf="!totalCount"
+								mat-raised-button
+								class="form-button"
+								color="primary"
+								(click)="getAnalytics()"
+							>
+								{{ "LIB_DOWNTIMES_GET_DATA_COUNT" | translate }}
+							</button>
+							<button
+								*ngIf="totalCount"
+								mat-raised-button
+								class="form-button"
+								color="accent"
+								(click)="getActualData()"
+							>
+								{{ "LIB_DOWNTIMES_GET_ACTUAL_DATA" | translate }}?
+							</button>
+						</div>
+						<div fxFlex="10">
+							<div *ngIf="totalCount && !results" [@enter]>
+								<h5>
+									{{ "LIB_DOWNTIMES_DATA_COUNT" | translate }}: {{ totalCount }}
+								</h5>
+							</div>
+							<div *ngIf="results" [@enter]>
+								<h5>
+									{{ "LIB_DOWNTIMES_RESULTS_COUNT" | translate }}:
+									{{ totalResultsCount }}
+								</h5>
+							</div>
+						</div>
+						<div fxFlex="45">
+							<button
+								*ngIf="results && results.length > 0"
+								mat-raised-button
+								class="form-button"
+								color="accent"
+								(click)="toCSV()"
+							>
+								{{ "LIB_DOWNTIMES_DOWNLOAD_AS_EXCEL_FILE" | translate }}
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<mat-divider></mat-divider>
+<div
+	class="downtime-table-container"
+	[hidden]="!results || (results && results.length === 0)"
+	[@downEnter]
+	[@leave]
+>
+	<table
+		id="reportsdowntimesdatatable"
+		mat-table
+		[dataSource]="results"
+		class="downtime-table"
+		multiTemplateDataRows
+	>
+		<ng-container matColumnDef="ID">
+			<th mat-header-cell *matHeaderCellDef>ID</th>
+			<td mat-cell *matCellDef="let downtime">{{ downtime.ID }}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="WorkCenter">
+			<th mat-header-cell *matHeaderCellDef>WorkCenter</th>
+			<td mat-cell *matCellDef="let downtime">
+				{{ downtime.WorkCenter }}
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Batch">
+			<th mat-header-cell *matHeaderCellDef>Batch</th>
+			<td mat-cell *matCellDef="let downtime">
+				{{ downtime.batch }}
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Order">
+			<th mat-header-cell *matHeaderCellDef>Order</th>
+			<td mat-cell *matCellDef="let downtime">
+				{{ downtime.order }}
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Activity">
+			<th mat-header-cell *matHeaderCellDef>Activity</th>
+			<td mat-cell *matCellDef="let downtime">
+				<mat-card class="badge" [ngClass]="downtime.isDeclared ? 'success' : 'failed'">{{
+					downtime.Activity
+				}}</mat-card>
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Duration">
+			<th mat-header-cell *matHeaderCellDef>Duration</th>
+			<td mat-cell *matCellDef="let downtime">
+				{{ downtime.Duration }}
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Start">
+			<th mat-header-cell *matHeaderCellDef>Start</th>
+			<td mat-cell *matCellDef="let downtime">
+				{{ downtime.Start | date: "dd/MM/yyyy HH:mm:ss" }}
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Stop">
+			<th mat-header-cell *matHeaderCellDef>Stop</th>
+			<td mat-cell *matCellDef="let downtime">
+				{{ downtime.Stop | date: "dd/MM/yyyy HH:mm:ss" }}
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Team">
+			<th mat-header-cell *matHeaderCellDef>Team</th>
+			<td mat-cell *matCellDef="let downtime">{{ downtime.Team }}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="User">
+			<th mat-header-cell *matHeaderCellDef>User</th>
+			<td mat-cell *matCellDef="let downtime">{{ downtime.User }}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="actions">
+			<td mat-footer-cell class="button-wrapper" *matFooterCellDef colspan="8">
+				<mat-paginator
+					#paginator
+					[showFirstLastButtons]="true"
+					[length]="totalResultsCount"
+					[pageSize]="5"
+					[pageSizeOptions]="[5, 8, 10, 25, 50, 100]"
+				></mat-paginator>
+			</td>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+		<tr
+			mat-footer-row
+			*matFooterRowDef="['actions']; sticky: true"
+			class="example-second-footer-row"
+		></tr>
+		<tr
+			mat-row
+			*matRowDef="let downtime; columns: displayedColumns"
+			class="downtime-detail-row"
+		></tr>
+	</table>
+</div>

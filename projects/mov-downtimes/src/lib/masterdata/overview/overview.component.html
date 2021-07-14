@@ -1,0 +1,24 @@
+<mat-tab-group
+	mat-align-tabs="center"
+	[selectedIndex]="0"
+	(selectedTabChange)="refreshComponents($event)"
+>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_ACTIVITIES' | translate }}">
+		<lib-downtimes-activities></lib-downtimes-activities>
+	</mat-tab>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_EQUIPMENTS' | translate }}">
+		<lib-downtimes-equipments
+			[viewFocus]="equipmentsFocus$"
+			[initialTabSelect]="tabSelectForEquipments"
+		></lib-downtimes-equipments>
+	</mat-tab>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_CAUSES_AND_SOLUTIONS' | translate }}">
+		<lib-downtimes-causes-solutions></lib-downtimes-causes-solutions>
+	</mat-tab>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_TEAMS' | translate }}">
+		<lib-downtimes-teams></lib-downtimes-teams>
+	</mat-tab>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_SETTINGS' | translate }}">
+		<lib-downtimes-settings></lib-downtimes-settings>
+	</mat-tab>
+</mat-tab-group>

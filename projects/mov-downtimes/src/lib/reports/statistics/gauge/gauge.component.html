@@ -1,0 +1,270 @@
+<mat-card class="mat-elevation-z8 centerItems" *ngIf="configMode" [@enter]>
+	<mat-card-content>
+		<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+			<div fxFlex="45" class="gaugeequipmentselection">
+				<mat-form-field class="equipmentsSelectionContainer">
+					<mat-chip-list
+						#chipList
+						aria-label="Equipment selection"
+						(click)="equipmentsSelectionControl.patchValue(undefined)"
+					>
+						<mat-chip
+							*ngFor="let eq of selectedEquipments"
+							[selectable]="false"
+							[removable]="true"
+							(removed)="removeEquipmentFromSelection(eq)"
+						>
+							<div [@enter]>
+								{{ eq.id }}
+							</div>
+							<mat-icon matChipRemove>cancel</mat-icon>
+						</mat-chip>
+						<input
+							placeholder="{{ 'LIB_DOWNTIMES_EQUIPMENTS' | translate }} ..."
+							[formControl]="equipmentsSelectionControl"
+							[matAutocomplete]="auto"
+							[matChipInputFor]="chipList"
+						/>
+					</mat-chip-list>
+					<mat-autocomplete
+						#auto="matAutocomplete"
+						(optionSelected)="addEquipmentToSelection($event.option)"
+					>
+						<div *ngFor="let eq of filteredEquipments$ | async">
+							<mat-option *ngIf="eq.id" [value]="eq" [@enter]>
+								{{ eq.id }}
+							</mat-option>
+						</div>
+					</mat-autocomplete>
+				</mat-form-field>
+			</div>
+			<div fxFlex="45" class="gaugetimeperiod">
+				<div class="dynamicperiod" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+					<div fxFlex="50">
+						<mat-slide-toggle
+							(change)="dynamicDaily()"
+							[(ngModel)]="
+								model.selection.dynamicDaily && !model.selection.dynamicWeekly
+							"
+							>{{ "LIB_DOWNTIMES_DAILY" | translate }}</mat-slide-toggle
+						>
+					</div>
+					<div fxFlex="50">
+						<mat-slide-toggle
+							(change)="dynamicWeekly()"
+							[(ngModel)]="
+								model.selection.dynamicWeekly && !model.selection.dynamicDaily
+							"
+							>{{ "LIB_DOWNTIMES_WEEKLY" | translate }}</mat-slide-toggle
+						>
+					</div>
+				</div>
+				<div class="formarea">
+					<div
+						fxLayout="row"
+						fxLayoutAlign="space-evenly stretch"
+						class="timeperiodcontainer"
+						style="    height: 100px;"
+					>
+						<div fxFlex="100">
+							<mat-form-field class="datetimeinput" style="margin-bottom: 60px;">
+								<mat-label>{{ "LIB_DOWNTIMES_FROM" | translate }}</mat-label>
+								<input
+									*ngIf="
+										!model.selection.dynamicDaily &&
+										!model.selection.dynamicWeekly
+									"
+									matInput
+									type="text"
+									mwlFlatpickr
+									[(ngModel)]="model.selection.dateFrom"
+									[enableTime]="true"
+									[enableSeconds]="true"
+									[altInput]="true"
+									[maxDate]="'today'"
+									[altInputClass]="'input-datetime'"
+								/>
+								<input
+									*ngIf="
+										model.selection.dynamicDaily &&
+										!model.selection.dynamicWeekly
+									"
+									matInput
+									type="text"
+									value="{{ 'LIB_DOWNTIMES_YESTERDAY' | translate }}"
+									disabled
+								/>
+								<input
+									*ngIf="
+										!model.selection.dynamicDaily &&
+										model.selection.dynamicWeekly
+									"
+									matInput
+									type="text"
+									value="{{ 'LIB_DOWNTIMES_A_WEEK_AGO' | translate }}"
+									disabled
+								/>
+							</mat-form-field>
+
+							<mat-form-field class="datetimeinput">
+								<mat-label>{{ "LIB_DOWNTIMES_TO" | translate }}</mat-label>
+								<input
+									*ngIf="
+										!model.selection.dynamicDaily &&
+										!model.selection.dynamicWeekly
+									"
+									matInput
+									type="text"
+									mwlFlatpickr
+									[minDate]="model.selection.dateFrom"
+									[(ngModel)]="model.selection.dateTo"
+									[enableTime]="true"
+									[enableSeconds]="true"
+									[altInput]="true"
+									[altInputClass]="'input-datetime'"
+								/>
+								<input
+									*ngIf="
+										model.selection.dynamicDaily ||
+										model.selection.dynamicWeekly
+									"
+									matInput
+									type="text"
+									value="{{ 'LIB_DOWNTIMES_NOW' | translate }}"
+									disabled
+								/>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div fxFlex="5" id="gaugecalculateanddeletebuttons">
+				<div class="centerItems" style="width: 300px;">
+					<button
+						[disabled]="
+							!(
+								selectedEquipments.length > 0 &&
+								model.selection.dateFrom &&
+								model.selection.dateTo
+							)
+						"
+						style="width: 81.5%;"
+						mat-raised-button
+						class="form-button"
+						color="primary"
+						(click)="getAnalytics()"
+					>
+						{{ "LIB_DOWNTIMES_CALCULATE" | translate }}
+					</button>
+					<button
+						style="margin-left: 10px;"
+						mat-mini-fab
+						class="form-button"
+						color="warn"
+						(click)="removeGaugeAction()"
+					>
+						<mat-icon>delete</mat-icon>
+					</button>
+				</div>
+			</div>
+		</div>
+	</mat-card-content>
+</mat-card>
+
+<mat-card class="mat-elevation-z8" *ngIf="!configMode" [@enter]>
+	<mat-card-content>
+		<div
+			class="dynamicperiodindicator"
+			*ngIf="model.selection.dynamicDaily || model.selection.dynamicWeekly"
+		>
+			<div *ngIf="model.selection.dynamicDaily">
+				{{ "LIB_DOWNTIMES_DAILY" | translate }}
+			</div>
+			<div *ngIf="model.selection.dynamicWeekly">
+				{{ "LIB_DOWNTIMES_WEEKLY" | translate }}
+			</div>
+		</div>
+
+		<div class="periodinfo" fxLayout="column" fxLayoutAlign="space-evenly stretch">
+			<div fxFlex="45">
+				<div fxLayout="row" fxLayoutAlign="space-evenly start">
+					<div fxFlex="45">
+						<div class="periodinfolabel">{{ "LIB_DOWNTIMES_FROM" | translate }}:</div>
+					</div>
+					<div fxFlex="45" class="periodinfodatelabel">
+						{{ model.selection.dateFrom | date: "dd/MM/yyyy HH:mm:ss" }}
+					</div>
+				</div>
+			</div>
+			<div fxFlex="45">
+				<div fxLayout="row" fxLayoutAlign="space-evenly start">
+					<div fxFlex="45">
+						<div class="periodinfolabel">{{ "LIB_DOWNTIMES_TO" | translate }}:</div>
+					</div>
+					<div fxFlex="45" class="periodinfodatelabel">
+						{{ model.selection.dateTo | date: "dd/MM/yyyy HH:mm:ss" }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div fxLayout="row" fxLayoutAlign="space-evenly stretch">
+				<div fxFlex="10">
+					<mat-icon (click)="back()" style="cursor:pointer; color: #673ab7;"
+						>reply</mat-icon
+					>
+				</div>
+				<div fxFlex="80" style="text-align: center;">
+					<mat-button-toggle-group name="tooltipMode" [multiple]="true">
+						<mat-button-toggle
+							[checked]="useActivityColors"
+							(change)="useActivityColors = $event.source.checked"
+							><mat-icon style="color: #673ab7;"
+								>invert_colors</mat-icon
+							></mat-button-toggle
+						>
+						<mat-button-toggle
+							[checked]="showLegend"
+							(change)="showLegend = $event.source.checked"
+							><mat-icon style="color: #673ab7;">list</mat-icon></mat-button-toggle
+						>
+					</mat-button-toggle-group>
+				</div>
+				<div fxFlex="10">
+					<!-- <mat-icon style="cursor:pointer; color: #673ab7;" [matMenuTriggerFor]="appMenu">
+                        brightness_high</mat-icon
+                    > -->
+					<mat-icon style="cursor:pointer; color: #673ab7;" [matMenuTriggerFor]="appMenu">
+						memory</mat-icon
+					>
+					<mat-menu #appMenu="matMenu">
+						<button mat-menu-item (click)="showInDataTab()">
+							{{ "LIB_DOWNTIMES_VIEW_DETAILS" | translate }}
+						</button>
+						<button mat-menu-item (click)="clone()">
+							{{ "LIB_DOWNTIMES_CLONE" | translate }}
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+			<div class="piechartwrapper">
+				<ngx-charts-pie-chart
+					[view]="view"
+					[customColors]="useActivityColors ? activityColors : undefined"
+					[results]="calculatedGaugeData.entries"
+					[legend]="showLegend"
+					[labels]="false"
+					[doughnut]="true"
+					legendPosition="below"
+					(select)="onSegmentClicked($event)"
+				>
+					<ng-template #tooltipTemplate let-model="model">
+						<span class="tooltip-label">{{ model!.name }}</span>
+					</ng-template>
+				</ngx-charts-pie-chart>
+			</div>
+			<div></div>
+		</div>
+	</mat-card-content>
+</mat-card>

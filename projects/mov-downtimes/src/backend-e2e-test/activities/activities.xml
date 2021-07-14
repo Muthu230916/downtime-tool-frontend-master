@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- BEFORE TEST -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Activity/process</Path>
+        <Method>POST</Method>
+        <Body>{
+            "sapPMCode":"",
+            "sapDowntimeCode":"",
+            "automatedCode":"",
+            "color":"#000000",
+            "isActive":false,
+            "isCauseMandatory":false,
+            "isSolutionMandatory":false,
+            "isSystemActive":false,
+            "descriptions":[
+                { 
+                    "description":"ActivityTest1",
+                    "languageId":"EN"
+                }
+            ],
+            "names":[ 
+                { 
+                    "name":"ActivityTest1",
+                    "languageId":"EN"
+                }
+            ],
+            "causes":[],
+            "solutions":[]
+        }
+        </Body>
+        <SetVariable name="activityId" JSONPath="uiid"></SetVariable>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = [activityId]</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- Test -->
+    <!-- Update Activity -->
+    -<RESTCallJSON>
+		<Path>dottweb/rest/Activity/process</Path>
+		<Method>POST</Method>
+		<Body>{ 
+            "activityId":[activityId]],
+            "color":"#000000",
+            "isActive":"false",
+            "isCauseMandatory":"false",
+            "isSolutionMandatory":"false",
+            "isSystemActive":"false",
+            "names":[ 
+                {
+                    "changedby":"Butrint",
+                    "changedon":"2019-12-10T14:20:38.620+0000",
+                    "createdby":"Butrint",
+                    "createdon":"2019-12-10T14:20:05.321+0000",
+                    "name":"name11",
+                    "languageId":"EN"
+                }
+            ],
+            "causes":[],
+            "solutions":[]
+        }</Body>
+
+        -<Expected>
+			<StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Success"</JSONPath>
+            <!-- This might be a string so it can not pass for that reason -->
+			<JSONPath>uiid = [activityId]</JSONPath>
+		</Expected>
+	</RESTCallJSON>
+
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Equipment/process</Path>
+        <Method>POST</Method>
+        <Body>{{ 
+            "activityId":[activityId],
+            "color":"#000000",
+            "isActive":"false",
+            "isCauseMandatory":"false",
+            "isSolutionMandatory":"false",
+            "isSystemActive":"false",
+            "names":[ 
+                {
+                    "changedby":"Butrint",
+                    "changedon":"2019-12-10T14:20:38.620+0000",
+                    "createdby":"Butrint",
+                    "createdon":"2019-12-10T14:20:05.321+0000",
+                    "name":"name11",
+                    "languageId":"EN"
+                }
+            ],
+            "causes":[],
+            "solutions":[]
+        }}</Body>
+
+        -<Expected>
+            <StatusCode>500</StatusCode>
+            <Error exception="MessageBodyReaderException"/>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- AFTER TEST -->
+    <!-- Delete Activity -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Activity/remove/[activityId]</Path>
+        <Method>DELETE</Method>
+
+    -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+			<JSONPath>uiid = [acitivityId]</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+</RESTJSONTestScenario>

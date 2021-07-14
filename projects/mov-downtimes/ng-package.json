@@ -1,0 +1,17 @@
+{
+    "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "../../dist/mov-downtimes",
+    "lib": {
+        "entryFile": "src/public-api.ts",
+        "umdModuleIds": {
+            "@fullcalendar/angular": "@fullcalendar/angular",
+            "angularx-flatpickr": "angularx-flatpickr",
+            "angular-tree-component": "angular-tree-component",
+            "ngx-mat-select-search": "ngx-mat-select-search",
+            "@swimlane/ngx-charts": "@swimlane/ngx-charts",
+            "angular-animations": "angular-animations",
+            "moment": "moment",
+            "@fullcalendar/resource-timeline": "@fullcalendar/resource-timeline"
+        }
+    }
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- AFTER TEST -->
+	<!-- also delete Equipment -->
+	<RESTCallJSON>
+		<Path>VERI95/Equipment/remove/Equipment1Test</Path>
+		<Method>DELETE</Method>
+		<Expected>
+			<StatusCode>200</StatusCode>
+		</Expected>
+	</RESTCallJSON>
+
+    <!-- REMOVE ACTIVITY -->
+   -<RESTCallJSON>
+        <Path>dottweb/rest/Activity/remove/1</Path>
+        <Method>DELETE</Method>
+
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+			<JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+</RESTJSONTestScenario>

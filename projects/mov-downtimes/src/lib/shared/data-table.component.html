@@ -1,0 +1,51 @@
+<div>
+	<mat-form-field>
+		<input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+	</mat-form-field>
+
+	<table
+		mat-table
+		[dataSource]="dataSource"
+		[multiTemplateDataRows]="true"
+		matSort
+		class="mat-elevation-z8"
+	>
+		<!-- Checkbox Column -->
+		<ng-container matColumnDef="select">
+			<th mat-header-cell *matHeaderCellDef>
+				<mat-checkbox
+					(change)="$event ? masterToggle() : null"
+					[checked]="selection.hasValue() && isAllSelected()"
+					[indeterminate]="selection.hasValue() && !isAllSelected()"
+					[aria-label]="checkboxLabel()"
+				>
+				</mat-checkbox>
+			</th>
+			<td mat-cell *matCellDef="let row">
+				<mat-checkbox
+					(click)="$event.stopPropagation()"
+					(change)="$event ? selection.toggle(row) : null"
+					[checked]="selection.isSelected(row)"
+					[aria-label]="checkboxLabel(row)"
+				>
+				</mat-checkbox>
+			</td>
+		</ng-container>
+
+		<ng-container
+			*ngFor="let disCol of displayedColumns; let colIndex = index"
+			matColumnDef="{{ disCol }}"
+		>
+			<mat-header-cell *matHeaderCellDef mat-sort-header>{{ disCol }}</mat-header-cell>
+			<mat-cell *matCellDef="let element"> {{ element[disCol] }} </mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+		<mat-row
+			*matRowDef="let row; columns: displayedColumns"
+			(click)="selection.toggle(row)"
+		></mat-row>
+	</table>
+
+	<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

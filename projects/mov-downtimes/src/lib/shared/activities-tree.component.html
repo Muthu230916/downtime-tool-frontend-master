@@ -1,0 +1,15 @@
+<div (mouseenter)="refreshTree()">
+	<tree-root #activitiesTree [nodes]="model" [options]="options" (initialized)="onTreeLoad()">
+		<ng-template #treeNodeTemplate let-node let-index="index">
+			<span style="white-space: nowrap" [ngClass]="{ disabled: !node.data.visible }">
+				<span class="badge" [ngStyle]="{ background: node.data.color }"></span>
+				<span>
+					{{ node.data.name }}
+				</span>
+				<span *ngIf="!node.data.isActive" style="font-size: 9px;">
+					{{ "LIB_DOWNTIMES_DISABLED" | translate }}
+				</span>
+			</span>
+		</ng-template>
+	</tree-root>
+</div>

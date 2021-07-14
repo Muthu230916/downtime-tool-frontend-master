@@ -1,0 +1,98 @@
+<h1 mat-dialog-title>
+	{{ "LIB_DOWNTIMES_SPLIT_DONWTIME" | translate }} <strong>{{ data.downtime.ID }}</strong>
+	{{ "LIB_DOWNTIMES_FROM" | translate }}
+	<em
+		><small>{{ data.downtime.Start | date: "dd/MM/yyyy HH:mm:ss" }}</small></em
+	>
+	{{ "LIB_DOWNTIMES_UNTIL" | translate }}
+	<em
+		><small>{{ data.downtime.Stop | date: "dd/MM/yyyy HH:mm:ss" }}</small></em
+	>
+	{{ "LIB_DOWNTIMES_WITH_EQUIPMENT" | translate }} <strong>{{ data.downtime.WorkCenter }}</strong>
+</h1>
+<div mat-dialog-content>
+	<div fxFlex fxLayout="row" fxLayoutAlign="space-between strech" class="content-wrapper">
+		<div fxFlex="0 0 auto">
+			<div
+				class="date-time-range"
+				*ngFor="let downtimePeriod of downtimesPeriodToShow; index as i"
+				[ngClass]="selectedDowntimeIdx === i ? 'selected' : ''"
+			>
+				<mat-form-field appearance="fill">
+					<label>{{ "LIB_DOWNTIMES_FROM" | translate }}: </label>
+					<input
+						matInput
+						type="text"
+						disabled
+						value="{{ downtimePeriod.start | date: 'dd/MM/yyyy HH:mm:ss' }}"
+					/>
+				</mat-form-field>
+				<mat-icon (click)="prepareSplit(downtimePeriod)">unfold_more</mat-icon>
+				<mat-form-field appearance="fill">
+					<label>{{ "LIB_DOWNTIMES_TO" | translate }}: </label>
+					<input
+						matInput
+						type="text"
+						disabled
+						value="{{ downtimePeriod.end | date: 'dd/MM/yyyy HH:mm:ss' }}"
+					/>
+				</mat-form-field>
+			</div>
+		</div>
+		<div
+			class="picker-wrapper"
+			*ngIf="showPicker"
+			fxFlex="0 0 auto"
+			fxLayout="column"
+			fxLayoutAlign="space-between stretch"
+			fxFlexAlign="center"
+			fxLayoutGap="20px"
+		>
+			<h3 fxFlex>{{ "LIB_DOWNTIMES_SPLIT_DOWNTIME_AT" | translate }}</h3>
+			<div fxFlex>
+				<mat-form-field appearance="outline">
+					<input
+						matInput
+						type="text"
+						mwlFlatpickr
+						[(ngModel)]="selectedDate"
+						[enableTime]="true"
+						[enableSeconds]="true"
+						[altInputClass]="'input-datetime'"
+						[altInput]="true"
+						[convertModelValue]="true"
+						[minDate]="activeSplitPeriod.start"
+						[maxDate]="activeSplitPeriod.end"
+					/>
+				</mat-form-field>
+			</div>
+			<div fxFlex>
+				<button mat-raised-button (click)="cancelSplit()" style="margin-right: 10px;">
+					{{ "LIB_DOWNTIMES_CANCEL" | translate }}
+				</button>
+				<button
+					mat-raised-button
+					color="primary"
+					(click)="split()"
+					[disabled]="!selectedDate"
+				>
+					{{ "LIB_DOWNTIMES_SPLIT" | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div mat-dialog-actions>
+	<button mat-raised-button (click)="dialogRef.close()">
+		{{ "LIB_DOWNTIMES_CANCEL" | translate }}
+	</button>
+	<button
+		mat-raised-button
+		color="primary"
+		(click)="save()"
+		[disabled]="downtimesPeriodToShow.length === 1"
+		cdkFocusInitial
+	>
+		{{ "LIB_DOWNTIMES_SAVE" | translate }}
+	</button>
+</div>

@@ -1,0 +1,146 @@
+<div fxLayout="row" fxLayoutAlign="space-evenly stretch" *ngIf="settings">
+	<div fxFlex="60">
+		<div class="fullWidth centerItems">
+			<div class="formarea mat-elevation-z8 form-container text-left">
+				<div class="toggle-button-group">
+					<p>{{ "LIB_DOWNTIMES_EQUIPMENTS_SOURCE" | translate }}:</p>
+					<mat-slide-toggle
+						[(ngModel)]="useVeri95Equipments"
+						(change)="onEquipmentsSourceChange()"
+					>
+						{{ "USE_VERI95_EQUIPMENTS" | translate }}?</mat-slide-toggle
+					>
+					<p>{{ "LIB_DOWNTIMES_MATERIALLOTS_SOURCE" | translate }}:</p>
+					<mat-slide-toggle
+						[(ngModel)]="useVeri95MaterialLots"
+						(change)="onMaterialLotsSourceChange()"
+					>
+						{{ "USE_VERI95_MATERIALLOTS" | translate }}?</mat-slide-toggle
+					>
+				</div>
+
+				<div class="toggle-button-group">
+					<div class="form-label">
+						<label for="causes">{{ "LIB_DOWNTIMES_CAUSES" | translate }}</label>
+					</div>
+					<mat-button-toggle-group
+						name="causes"
+						aria-label="Causes"
+						id="causes"
+						[value]="'' + settings.masterCause"
+						(change)="onCauseChange()"
+					>
+						<mat-button-toggle value="true">{{
+							"LIB_DOWNTIMES_MANDATORY" | translate
+						}}</mat-button-toggle>
+						<mat-button-toggle value="false">{{
+							"LIB_DOWNTIMES_OPTIONAL" | translate
+						}}</mat-button-toggle>
+					</mat-button-toggle-group>
+				</div>
+				<div class="toggle-button-group">
+					<div class="form-label">
+						<label for="solutions">{{ "LIB_DOWNTIMES_SOLUTIONS" | translate }}</label>
+					</div>
+					<mat-button-toggle-group
+						name="solutions"
+						aria-label="Solutions"
+						id="solutions"
+						[value]="'' + settings.masterSolution"
+						(change)="onSolutionChange()"
+					>
+						<mat-button-toggle value="true">{{
+							"LIB_DOWNTIMES_MANDATORY" | translate
+						}}</mat-button-toggle>
+						<mat-button-toggle value="false">{{
+							"LIB_DOWNTIMES_OPTIONAL" | translate
+						}}</mat-button-toggle>
+					</mat-button-toggle-group>
+				</div>
+				<div class="toggle-button-group">
+					<div class="form-label">
+						<label for="location">{{ "LIB_DOWNTIMES_LOCATION" | translate }}</label>
+					</div>
+					<mat-button-toggle-group
+						name="location"
+						aria-label="Location"
+						id="location"
+						[value]="'' + settings.masterLocation"
+						(change)="onLocationChange()"
+					>
+						<mat-button-toggle value="true">{{
+							"LIB_DOWNTIMES_MANDATORY" | translate
+						}}</mat-button-toggle>
+						<mat-button-toggle value="false">{{
+							"LIB_DOWNTIMES_OPTIONAL" | translate
+						}}</mat-button-toggle>
+					</mat-button-toggle-group>
+				</div>
+
+				<mat-form-field appearance="outline" style="padding-top: 25px;">
+					<mat-label>{{
+						"LIB_DOWNTIMES_NUMBER_OF_DOWNTIMES_PER_PAGE" | translate
+					}}</mat-label>
+					<input type="number" matInput min="0" [(ngModel)]="settings.masterDotPerPage" />
+				</mat-form-field>
+				<mat-form-field appearance="outline">
+					<mat-slide-toggle [(ngModel)]="settings.masterIncludeOverlappingDot">{{
+						"LIB_DOWNTIMES_INCLUDE_OVERLAPPING_DOWNTIMES" | translate
+					}}</mat-slide-toggle>
+					<input matInput hidden />
+				</mat-form-field>
+				<p>{{ "LIB_DOWNTIMES_MONITOR" | translate }}</p>
+				<mat-form-field appearance="outline">
+					<mat-slide-toggle [(ngModel)]="hasDowntimesForLastHours"
+						>{{
+							"LIB_DOWNTIMES_SHOW_DOWNTIMES_FOR_LAST_@x@_HOURS"
+								| translate
+								| replaceVariables
+									: {
+											x: localMasterXLast
+									  }
+						}}
+					</mat-slide-toggle>
+					<input
+						matInput
+						matSuffix
+						type="number"
+						min="0"
+						[disabled]="!hasDowntimesForLastHours"
+						[(ngModel)]="localMasterXLast"
+					/>
+				</mat-form-field>
+				<mat-form-field appearance="outline">
+					<mat-slide-toggle [(ngModel)]="hasLastDowntimes">{{
+						"LIB_DOWNTIMES_SHOW_LAST_@x@_DOWNTIMES"
+							| translate
+							| replaceVariables
+								: {
+										x: localMasterXHours
+								  }
+					}}</mat-slide-toggle>
+					<input
+						matInput
+						matSuffix
+						type="number"
+						min="0"
+						[disabled]="!hasLastDowntimes"
+						[(ngModel)]="localMasterXHours"
+					/>
+				</mat-form-field>
+				<mat-form-field appearance="outline">
+					<mat-slide-toggle [(ngModel)]="settings.masterShowUndeclared">{{
+						"LIB_DOWNTIMES_SHOW_UNDECLARED_DOWNTIMES" | translate
+					}}</mat-slide-toggle>
+					<input matInput hidden />
+				</mat-form-field>
+				<button mat-stroked-button class="form-button" (click)="refreshSettings()">
+					{{ "LIB_DOWNTIMES_REFRESH" | translate }}
+				</button>
+				<button mat-raised-button class="form-button" color="primary" (click)="save()">
+					{{ "LIB_DOWNTIMES_SAVE_SETTINGS" | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

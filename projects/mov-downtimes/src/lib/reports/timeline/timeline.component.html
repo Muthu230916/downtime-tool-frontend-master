@@ -1,0 +1,157 @@
+<div
+	*ngIf="showDowntimeInfo"
+	class="downtime-info"
+	fxFlex="row"
+	fxLayoutAlign="space-around center"
+>
+	<div class="info-title">
+		{{ "LIB_DOWNTIMES_EQUIPMENT" | translate }}:
+		<span class="info-description"> {{ downtimeInfo.resourceId }}</span>
+	</div>
+	<div class="info-title">
+		{{ "LIB_DOWNTIMES_START_TIME" | translate }}:
+		<span class="info-description">
+			{{ downtimeInfo.start | date: "dd/MM/yyyy HH:mm:ss" }}</span
+		>
+	</div>
+	<div class="info-title">
+		{{ "LIB_DOWNTIMES_END_TIME" | translate }}:
+		<span class="info-description"> {{ downtimeInfo.end | date: "dd/MM/yyyy HH:mm:ss" }}</span>
+	</div>
+	<div class="info-title">
+		{{ "LIB_DOWNTIMES_DURATION" | translate }}:
+		<span class="info-description"> {{ downtimeInfo.extendedProps.duration }}</span>
+	</div>
+	<div
+		class="info-title"
+		*ngIf="downtimeInfo.extendedProps && downtimeInfo.extendedProps.teamName"
+	>
+		{{ "LIB_DOWNTIMES_TEAM" | translate }}:
+		<span class="info-description"> {{ downtimeInfo.extendedProps.teamName }}</span>
+	</div>
+	<div
+		class="info-title"
+		*ngIf="downtimeInfo.extendedProps && downtimeInfo.extendedProps.solutionName"
+	>
+		{{ "LIB_DOWNTIMES_SOLUTION" | translate }}:
+		<span class="info-description"> {{ downtimeInfo.extendedProps.solutionName }}</span>
+	</div>
+	<div
+		class="info-title"
+		*ngIf="downtimeInfo.extendedProps && downtimeInfo.extendedProps.causeName"
+	>
+		{{ "LIB_DOWNTIMES_CAUSE" | translate }}:
+		<span class="info-description"> {{ downtimeInfo.extendedProps.causeName }}</span>
+	</div>
+</div>
+<div
+	id="contentwrapper"
+	fxLayout="column"
+	fxLayoutAlign="space-between stretch"
+	fxFlex="1 1 calc(100vh - 48px)"
+>
+	<div
+		class="formareatimeline mat-elevation-z8"
+		fxFlex="auto"
+		fxLayout="column"
+		fxLayoutAlign="space-between space-evenly"
+	>
+		<mat-form-field class="equipmentsSelectionContainer mp-10" *ngIf="filteredEquipments">
+			<mat-chip-list #chipList aria-label="Equipment selection">
+				<mat-chip
+					*ngFor="let equipment of equipmentsSelected"
+					(removed)="remove(equipment)"
+				>
+					{{ equipment.id }}
+					<mat-icon matChipRemove>cancel</mat-icon>
+				</mat-chip>
+				<input
+					placeholder="{{ 'LIB_DOWNTIMES_SELECT_EQUIPMENTS' | translate }} ..."
+					#equipmentInput
+					[formControl]="equipmentsFilterControl"
+					[matAutocomplete]="auto"
+					[matChipInputFor]="chipList"
+					[matChipInputAddOnBlur]="false"
+				/>
+			</mat-chip-list>
+			<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+				<mat-option
+					*ngFor="let equpiment of filteredEquipments$ | async"
+					[value]="equpiment"
+				>
+					{{ equpiment.id }}
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+		<div class="mp-10" fxLayoutGap="20px" fxLayout="row" fxLayoutAlign="start baseline">
+			<mat-form-field class="datetimeinput">
+				<mat-label>{{ "LIB_DOWNTIMES_DATE" | translate }}</mat-label>
+				<input
+					matInput
+					#dp
+					type="text"
+					mwlFlatpickr
+					[(ngModel)]="date"
+					(ngModelChange)="modelDateChanged()"
+					[altInput]="true"
+					[altInputClass]="'input-datetime'"
+					[convertModelValue]="true"
+					[enableTime]="false"
+					[maxDate]="endOfToday"
+					[altFormat]="'d/m/Y'"
+					[disabled]="isLive"
+					required
+			/></mat-form-field>
+			<mat-checkbox [(ngModel)]="isLive" (ngModelChange)="isLiveChanged()">{{
+				"LIB_DOWNTIMES_IS_LIVE" | translate
+			}}</mat-checkbox>
+			<mat-checkbox [(ngModel)]="showShortStop">{{
+				"LIB_DOWNTIMES_SHOW_SHORT_STOP" | translate
+			}}</mat-checkbox>
+			<button
+				mat-raised-button
+				color="primary"
+				(click)="search(dp.value)"
+				[disabled]="!canSearch"
+				cdkFocusInitial
+			>
+				{{ "LIB_DOWNTIMES_SEARCH" | translate }}
+			</button>
+		</div>
+	</div>
+	<div fxFlex="grow">
+		<full-calendar
+			[hidden]="!showCalendar"
+			#fullCalendar
+			defaultView="resourceTimelineDay"
+			[defaultDate]="date"
+			[plugins]="calendarPlugins"
+			[editable]="true"
+			schedulerLicenseKey="0563721373-fcs-1574334285"
+			[resources]="equipmentResources"
+			[events]="equipmentsEvent"
+			[header]="{
+				left: 'prev,next',
+				center: 'title',
+				right: 'zoomIn,zoomOut'
+			}"
+			[rerenderDelay]="100"
+			[timeZone]="'local'"
+			resourceLabelText="{{ 'LIB_DOWNTIMES_EQUIPMENTS' | translate }}"
+			[slotLabelFormat]="{
+				hour: '2-digit',
+				minute: '2-digit',
+				omitZeroMinute: true,
+				meridiem: 'long',
+				hour12: false
+			}"
+			[resourceAreaWidth]="230"
+			[height]="'parent'"
+			(dayRender)="dayRender()"
+			[validRange]="{
+				end: endOfToday
+			}"
+			[eventDurationEditable]="false"
+		></full-calendar>
+	</div>
+</div>

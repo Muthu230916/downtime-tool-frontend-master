@@ -1,0 +1,400 @@
+[
+	{
+		"entity":"AddonInformation",
+		"class":"movilitas.com.dott.jpa.entity.customizing.AddonInformation",
+		"table":"V95_CUST_ADDO",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"long"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"addonName", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"addonVersion", "isId":"false", "linkType":"", "type":"String"}
+		],
+		"isCustomizingTable": true
+	},
+	{
+		"entity":"GeneralCustomizing",
+		"class":"movilitas.com.dott.jpa.entity.customizing.GeneralCustomizing",
+		"table":"DTT_CUST_GNRL",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"long"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"customizingId", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customizingValue", "isId":"false", "linkType":"", "type":"String"}
+		],
+		"isCustomizingTable": true
+	},
+	{
+		"entity":"Tenant",
+		"class":"movilitas.com.dott.jpa.entity.customizing.Tenant",
+		"table":"DTT_CUST_TNNT",
+		"attributes": [
+			{ "name":"tenant", "isId":"true", "linkType":"", "type":"String"},
+			{ "name":"sourceTenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"description", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"status", "isId":"false", "linkType":"", "type":"String"}
+		],
+		"isCustomizingTable": true
+	},
+	{
+		"entity":"Translation",
+		"class":"movilitas.com.dott.jpa.entity.customizing.Translation",
+		"table":"DTT_CUST_TRNS",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"long"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"translationId", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"translation", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"languageId", "isId":"false", "linkType":"", "type":"String"}
+		],
+		"isCustomizingTable": true
+	},
+	{
+		"entity":"Activity",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Activity",
+		"table":"DTT_ACTV",
+		"attributes": [
+			{ "name":"activityId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"sapPMCode", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"sapDowntimeCode", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"allowance", "isId":"false", "linkType":"", "type":"Integer"},
+			{ "name":"maximumAllowance", "isId":"false", "linkType":"", "type":"Integer"},
+			{ "name":"automatedCode", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"color", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isActive", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isCauseMandatory", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isSolutionMandatory", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isSystemActive", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"parentActivity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"},
+			{ "name":"nestedActivities", "isId":"false", "linkType":"OneToMany", "type":"Activity"},
+			{ "name":"activityType", "isId":"false", "linkType":"ManyToOne", "type":"ActivityType"},
+			{ "name":"causes", "isId":"false", "linkType":"OneToMany", "type":"CauseAssociation"},
+			{ "name":"solutions", "isId":"false", "linkType":"OneToMany", "type":"SolutionAssociation"},
+			{ "name":"equipments", "isId":"false", "linkType":"OneToMany", "type":"EquipmentAssociation"},
+			{ "name":"downtimes", "isId":"false", "linkType":"OneToMany", "type":"Downtime"},
+			{ "name":"names", "isId":"false", "linkType":"OneToMany", "type":"Name"},
+			{ "name":"descriptions", "isId":"false", "linkType":"OneToMany", "type":"Description"}
+		]
+	},
+	{
+		"entity":"ActivityType",
+		"class":"movilitas.com.dott.jpa.entity.downtime.ActivityType",
+		"table":"DTT_ACTV_TYPE",
+		"attributes": [
+			{ "name":"activityTypeId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"activities", "isId":"false", "linkType":"OneToMany", "type":"Activity"},
+			{ "name":"names", "isId":"false", "linkType":"OneToMany", "type":"Name"}
+		]
+	},
+	{
+		"entity":"Cause",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Cause",
+		"table":"DTT_CAUS",
+		"attributes": [
+			{ "name":"causeId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"downtimes", "isId":"false", "linkType":"OneToMany", "type":"Downtime"},
+			{ "name":"activities", "isId":"false", "linkType":"OneToMany", "type":"CauseAssociation"},
+			{ "name":"names", "isId":"false", "linkType":"OneToMany", "type":"Name"}
+		]
+	},
+	{
+		"entity":"CauseAssociation",
+		"class":"movilitas.com.dott.jpa.entity.downtime.CauseAssociation",
+		"table":"DTT_ASSO_CAUS_ACTV",
+		"attributes": [
+			{ "name":"causeAssociationId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"cause", "isId":"false", "linkType":"ManyToOne", "type":"Cause"},
+			{ "name":"activity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"}
+		]
+	},
+	{
+		"entity":"Description",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Description",
+		"table":"DTT_TEXT",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"description", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"languageId", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"activity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"}
+		]
+	},
+	{
+		"entity":"Downtime",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Downtime",
+		"table":"DTT_DWTM",
+		"attributes": [
+			{ "name":"downtimeId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"endTime", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"startTime", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"batch", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"order", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"duration", "isId":"false", "linkType":"", "type":"Integer"},
+			{ "name":"causeComment", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"solutionComment", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isAutomated", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isSplit", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isShortStop", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField01", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField02", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField03", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField04", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField05", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField06", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"equipment", "isId":"false", "linkType":"ManyToOne", "type":"Equipment"},
+			{ "name":"activity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"},
+			{ "name":"solution", "isId":"false", "linkType":"ManyToOne", "type":"Solution"},
+			{ "name":"cause", "isId":"false", "linkType":"ManyToOne", "type":"Cause"},
+			{ "name":"team", "isId":"false", "linkType":"ManyToOne", "type":"Team"},
+			{ "name":"location", "isId":"false", "linkType":"ManyToOne", "type":"Location"}
+		]
+	},
+	{
+		"entity":"Equipment",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Equipment",
+		"table":"DTT_EQUI",
+		"attributes": [
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"isLocationMandatory", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"shortStopTreshold", "isId":"false", "linkType":"", "type":"Integer"},
+			{ "name":"locations", "isId":"false", "linkType":"OneToMany", "type":"Location"},
+			{ "name":"downtimes", "isId":"false", "linkType":"OneToMany", "type":"Downtime"},
+			{ "name":"activities", "isId":"false", "linkType":"OneToMany", "type":"EquipmentAssociation"}
+		]
+	},
+	{
+		"entity":"EquipmentAssociation",
+		"class":"movilitas.com.dott.jpa.entity.downtime.EquipmentAssociation",
+		"table":"DTT_ASSO_EQUI_ACTV",
+		"attributes": [
+			{ "name":"equipmentAssociationId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"machineCode", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"allowance", "isId":"false", "linkType":"", "type":"Integer"},
+			{ "name":"maximumAllowance", "isId":"false", "linkType":"", "type":"Integer"},
+			{ "name":"equipment", "isId":"false", "linkType":"ManyToOne", "type":"Equipment"},
+			{ "name":"activity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"}
+		]
+	},
+	{
+		"entity":"EquipmentId",
+		"class":"movilitas.com.dott.jpa.entity.downtime.EquipmentId",
+		"attributes": [
+			{ "name":"id", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"type", "isId":"false", "linkType":"", "type":"String"}
+		]
+	},
+	{
+		"entity":"Location",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Location",
+		"table":"DTT_LCTN",
+		"attributes": [
+			{ "name":"locationId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"equipment", "isId":"false", "linkType":"ManyToOne", "type":"Equipment"},
+			{ "name":"names", "isId":"false", "linkType":"OneToMany", "type":"Name"}
+		]
+	},
+	{
+		"entity":"Name",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Name",
+		"table":"DTT_NAME",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"name", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"languageId", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"activityType", "isId":"false", "linkType":"ManyToOne", "type":"ActivityType"},
+			{ "name":"solution", "isId":"false", "linkType":"ManyToOne", "type":"Solution"},
+			{ "name":"cause", "isId":"false", "linkType":"ManyToOne", "type":"Cause"},
+			{ "name":"activity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"},
+			{ "name":"team", "isId":"false", "linkType":"ManyToOne", "type":"Team"},
+			{ "name":"location", "isId":"false", "linkType":"ManyToOne", "type":"Location"}
+		]
+	},
+	{
+		"entity":"Report",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Report",
+		"table":"DTT_RPRT",
+		"attributes": [
+			{ "name":"reportId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"name", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"type", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"content", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"isShared", "isId":"false", "linkType":"", "type":"String"}
+		]
+	},
+	{
+		"entity":"Solution",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Solution",
+		"table":"DTT_SLTN",
+		"attributes": [
+			{ "name":"solutionId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"activities", "isId":"false", "linkType":"OneToMany", "type":"SolutionAssociation"},
+			{ "name":"downtimes", "isId":"false", "linkType":"OneToMany", "type":"Downtime"},
+			{ "name":"names", "isId":"false", "linkType":"OneToMany", "type":"Name"}
+		]
+	},
+	{
+		"entity":"SolutionAssociation",
+		"class":"movilitas.com.dott.jpa.entity.downtime.SolutionAssociation",
+		"table":"DTT_ASSO_SLTN_ACTV",
+		"attributes": [
+			{ "name":"solutionAssociationId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"solution", "isId":"false", "linkType":"ManyToOne", "type":"Solution"},
+			{ "name":"activity", "isId":"false", "linkType":"ManyToOne", "type":"Activity"}
+		]
+	},
+	{
+		"entity":"Team",
+		"class":"movilitas.com.dott.jpa.entity.downtime.Team",
+		"table":"DTT_TEAM",
+		"attributes": [
+			{ "name":"teamId", "isId":"true", "linkType":"", "type":"BigInteger"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"downtimes", "isId":"false", "linkType":"OneToMany", "type":"Downtime"},
+			{ "name":"names", "isId":"false", "linkType":"OneToMany", "type":"Name"}
+		]
+	},
+	{
+		"entity":"EquipmentClassV95",
+		"class":"movilitas.com.dott.jpa.entity.shared.EquipmentClassV95",
+		"table":"V95_EQCL",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"long"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"id", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField01", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField02", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField03", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField04", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField05", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField06", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customizingDataType", "isId":"false", "linkType":"", "type":"String"}
+		]
+	},
+	{
+		"entity":"EquipmentV95",
+		"class":"movilitas.com.dott.jpa.entity.shared.EquipmentV95",
+		"table":"V95_EQUI",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"long"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"customizingDataType", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"id", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField01", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField02", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField03", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField04", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField05", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField06", "isId":"false", "linkType":"", "type":"String"}
+		]
+	},
+	{
+		"entity":"MaterialLotV95",
+		"class":"movilitas.com.dott.jpa.entity.shared.MaterialLotV95",
+		"table":"V95_MALT",
+		"attributes": [
+			{ "name":"uiid", "isId":"true", "linkType":"", "type":"long"},
+			{ "name":"tenant", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"changedon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"createdby", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"createdon", "isId":"false", "linkType":"", "type":"Timestamp"},
+			{ "name":"id", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField01", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField02", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField03", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField04", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField05", "isId":"false", "linkType":"", "type":"String"},
+			{ "name":"customField06", "isId":"false", "linkType":"", "type":"String"}
+		]
+	}
+]

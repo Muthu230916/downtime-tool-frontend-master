@@ -1,0 +1,56 @@
+.example-chip-list {
+	width: 100%;
+}
+
+.equipmentSelectionRemover {
+	position: absolute;
+	right: 5px;
+	top: -3px;
+	color: gray;
+	font-weight: bold;
+}
+
+.mp-10 {
+	margin: 10px;
+	padding: 10px;
+}
+
+.mr-10 {
+	margin-right: 10px;
+}
+
+.equipmentsSelectionContainer {
+	display: unset;
+}
+
+.downtime-info {
+	background-color: #3498db;
+	border-bottom: 2px solid #5b579a;
+	color: white;
+	padding: 20px;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 1000;
+}
+
+.info-title {
+	font-size: 0.8em;
+	display: inline-block;
+	border-bottom: 1px dashed #5b579a;
+	padding-right: 20px;
+	vertical-align: text-bottom;
+	color: #5b579a;
+	font-weight: bold;
+}
+
+.info-description {
+	color: white;
+}
+
+.formareatimeline {
+	padding: 0.5% !important;
+	margin: 15px !important;
+	border-radius: 7px;
+}

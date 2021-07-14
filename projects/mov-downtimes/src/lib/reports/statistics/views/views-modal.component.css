@@ -1,0 +1,13 @@
+.localizationitem {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.mainmodalbuttons {
+	justify-content: flex-end;
+}
+
+.modaladvancedbuttons {
+	display: flex;
+	justify-content: center;
+}

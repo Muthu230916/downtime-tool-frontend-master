@@ -1,0 +1,11 @@
+<mat-tab-group mat-align-tabs="center" [(selectedIndex)]="selectedTab">
+	<mat-tab label="{{ 'LIB_DOWNTIMES_DATA' | translate }}">
+		<lib-downtimes-reports-data></lib-downtimes-reports-data>
+	</mat-tab>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_STATISTICS' | translate }}">
+		<lib-downtimes-reports-statistics></lib-downtimes-reports-statistics>
+	</mat-tab>
+	<mat-tab label="{{ 'LIB_DOWNTIMES_TIMELINE' | translate }}">
+		<lib-downtimes-reports-timeline></lib-downtimes-reports-timeline>
+	</mat-tab>
+</mat-tab-group>

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- BEFORE TEST -->
+    <!-- CREATE DOWNTIME -->
+    -<RESTCallJSON>
+        <PATH>dottweb/rest/Downtime/process</PATH>
+        <Method>POST</Method>
+        <Body>{
+            "startTime": "2019-10-20T18:00:41",
+            "endTime": "2019-10-20T18:13:41",
+            "equipmentId": {
+                "id": "Equipment1Test",
+                "type": "EQUIPMENT"
+            },
+            "isAutomated": false
+        } 
+        </Body>
+        <!-- <SetVariable name="downtimeId" JSONPath="uiid"></SetVariable> -->
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- CREATE TEAM -->
+    -<RESTCallJSON>
+        <PATH>dottweb/rest/Team/process</PATH>
+        <Method>POST</Method>
+        <Body>{
+            "names": [{"name":"New Team","languageId":"EN"}]
+        }</Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- CREATE ACTIVITY -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Activity/process</Path>
+        <Method>POST</Method>
+        <Body>{
+            "sapPMCode":"",
+            "sapDowntimeCode":"",
+            "automatedCode":"",
+            "color":"#000000",
+            "isActive":false,
+            "isCauseMandatory":false,
+            "isSolutionMandatory":false,
+            "isSystemActive":false,
+            "names":[ 
+                { 
+                    "name":"ActivityTest1",
+                    "languageId":"EN"
+                }
+            ],
+            "causes":[],
+            "solutions":[]
+        }
+        </Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+</RESTJSONTestScenario>

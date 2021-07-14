@@ -1,0 +1,421 @@
+<div class="contentwrapper" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+	<div fxFlex="29.5">
+		<div class="fullWidth centerItems">
+			<h4>{{ "LIB_DOWNTIMES_EXISTING_EQUIPMENTS" | translate }}</h4>
+		</div>
+		<div>
+			<div class="formarea mat-elevation-z8">
+				<mat-tab-group
+					mat-align-tabs="center"
+					class="width90center"
+					[selectedIndex]="initialTabSelect"
+					(selectedTabChange)="refreshTree($event)"
+				>
+					<mat-tab label="{{ 'LIB_DOWNTIMES_CLASSES' | translate }}">
+						<mat-form-field style="padding-top: 30px;">
+							<mat-label>{{ "LIB_DOWNTIMES_SELECT_CLASS" | translate }}</mat-label>
+							<mat-select
+								[(ngModel)]="selectedEquipmentClass"
+								(selectionChange)="classSelectionChanged($event)"
+							>
+								<mat-option>
+									<ngx-mat-select-search
+										[placeholderLabel]="'Find class ...'"
+										[formControl]="classesFilterControl"
+										[noEntriesFoundLabel]="'no equipment classes found'"
+									></ngx-mat-select-search>
+								</mat-option>
+
+								<ng-container *ngIf="useVeri95Equipments">
+									<mat-option [value]="showAllEquipments">
+										({{ "LIB_DOWNTIMES_NO_CLASS_SELECTED" | translate }} -
+										{{ "LIB_DOWNTIMES_SHOWS_ALL_EQUIPMENTS" | translate }})
+									</mat-option>
+									<mat-option [value]="equipmentsWithNoClass">
+										({{ "LIB_DOWNTIMES_EQUIPMENTS_WITHOUT_CLASS" | translate }})
+									</mat-option>
+								</ng-container>
+
+								<div *ngFor="let ec of filteredEquipmentClasses">
+									<mat-option *ngIf="ec.id" [value]="ec">
+										{{ ec.id
+										}}<span *ngIf="ec.hasEquipment === 'true'">
+											({{ "LIB_DOWNTIMES_CONFIGURED" | translate }})</span
+										>
+									</mat-option>
+								</div>
+							</mat-select>
+						</mat-form-field>
+						<div class="centerItems">
+							<button
+								*ngIf="!useVeri95Equipments"
+								(click)="addDowntimesEquipmentClass()"
+								mat-raised-button
+								class="form-button"
+								color="primary"
+							>
+								{{ "LIB_DOWNTIMES_ADD_EQUIPMENT_CLASS" | translate }}
+							</button>
+						</div>
+					</mat-tab>
+					<mat-tab label="{{ 'LIB_DOWNTIMES_EQUIPMENTS' | translate }}">
+						<div *ngIf="useVeri95Equipments">
+							<div *ngIf="selectedEquipmentClass === showAllEquipments" [@enter]>
+								<h5>{{ "LIB_DOWNTIMES_SHOWING_ALL_EQUIPMENTS" | translate }}</h5>
+							</div>
+							<div *ngIf="selectedEquipmentClass === equipmentsWithNoClass" [@enter]>
+								<h5>{{ "LIB_DOWNTIMES_EQUIPMENTS_WITHOUT_CLASS" | translate }}</h5>
+							</div>
+							<div
+								*ngIf="
+									selectedEquipmentClass &&
+									selectedEquipmentClass !== showAllEquipments &&
+									selectedEquipmentClass !== equipmentsWithNoClass
+								"
+								[@enter]
+							>
+								<h5>
+									{{ "LIB_DOWNTIMES_EQUIPMENTS_FOR" | translate }}:
+									{{ selectedEquipmentClass.id }}
+								</h5>
+							</div>
+						</div>
+						<div *ngIf="!useVeri95Equipments" style="padding-top: 30px;"></div>
+						<mat-form-field>
+							<mat-label>{{
+								"LIB_DOWNTIMES_SELECT_EQUIPMENT" | translate
+							}}</mat-label>
+							<mat-select
+								[(ngModel)]="selectedEquipment"
+								(selectionChange)="equipmentSelectionChanged($event)"
+							>
+								<ngx-mat-select-search
+									[placeholderLabel]="'Find equipment ...'"
+									[formControl]="equipmentsFilterControl"
+									[noEntriesFoundLabel]="'no equipments found'"
+								></ngx-mat-select-search>
+								<div *ngFor="let e of filteredEquipments">
+									<mat-option *ngIf="e.id" [value]="e">
+										{{ e.id
+										}}<span *ngIf="e.hasEquipment === 'true'">
+											({{ "LIB_DOWNTIMES_CONFIGURED" | translate }})</span
+										>
+									</mat-option>
+								</div>
+							</mat-select>
+						</mat-form-field>
+						<div class="centerItems">
+							<button
+								*ngIf="!useVeri95Equipments"
+								(click)="addDowntimesEquipment()"
+								mat-raised-button
+								class="form-button"
+								color="primary"
+							>
+								{{ "LIB_DOWNTIMES_ADD_EQUIPMENT" | translate }}
+							</button>
+						</div>
+					</mat-tab>
+				</mat-tab-group>
+			</div>
+
+			<div
+				class="centerItems"
+				*ngIf="
+					useVeri95Equipments &&
+					(selectedEquipment ||
+						(selectedEquipmentClass &&
+							selectedEquipmentClass !== showAllEquipments &&
+							selectedEquipmentClass !== equipmentsWithNoClass))
+				"
+			>
+				<h4>{{ "LIB_DOWNTIMES_DESCRIPTION" | translate }}:</h4>
+				<div *ngIf="selectedEquipmentClass">
+					{{ selectedEquipmentClass.description }}
+				</div>
+				<div *ngIf="selectedEquipment">
+					{{ selectedEquipment.description }}
+				</div>
+			</div>
+
+			<div>
+				<div class="fullWidth centerItems">
+					<div
+						*ngIf="
+							!selectedActivity &&
+							((selectedEquipmentClass &&
+								selectedEquipmentClass !== showAllEquipments &&
+								selectedEquipmentClass !== equipmentsWithNoClass) ||
+								selectedEquipment)
+						"
+						[@enter]
+					>
+						<h5>{{ "LIB_DOWNTIMES_NO_ACTIVITY_SELECTED" | translate }}</h5>
+					</div>
+				</div>
+			</div>
+
+			<div *ngIf="selectedActivity && (selectedEquipmentClass || selectedEquipment)" [@enter]>
+				<div>
+					<div class="fullWidth centerItems">
+						<h4>
+							{{ "LIB_DOWNTIMES_SELECTED_ACTIVITY" | translate }} ({{
+								"LIB_DOWNTIMES_ASSOCIATION_PARAMETERS" | translate
+							}})
+						</h4>
+					</div>
+				</div>
+
+				<div>
+					<div>
+						<div class="formarea mat-elevation-z8">
+							<div class="spacing20">
+								<mat-form-field appearance="outline">
+									<mat-label>{{
+										"LIB_DOWNTIMES_ALLOWANCE" | translate
+									}}</mat-label>
+									<input
+										type="number"
+										min="0"
+										matInput
+										placeholder="{{ 'LIB_DOWNTIMES_ALLOWANCE' | translate }}"
+										[(ngModel)]="equipmentOrClassActivityAssociation.allowance"
+									/>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>{{
+										"LIB_DOWNTIMES_MAXIMUM_ALLOWANCE" | translate
+									}}</mat-label>
+									<input
+										type="number"
+										min="0"
+										matInput
+										placeholder="{{
+											'LIB_DOWNTIMES_MAXIMUM_ALLOWANCE' | translate
+										}}"
+										[(ngModel)]="
+											equipmentOrClassActivityAssociation.maximumAllowance
+										"
+									/>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>{{
+										"LIB_DOWNTIMES_MACHINE_CODE" | translate
+									}}</mat-label>
+									<input
+										type="number"
+										min="0"
+										matInput
+										placeholder="{{ 'LIB_DOWNTIMES_MACHINE_CODE' | translate }}"
+										[(ngModel)]="
+											equipmentOrClassActivityAssociation.machineCode
+										"
+									/>
+								</mat-form-field>
+								<div class="centerItems">
+									<button
+										*ngIf="
+											!equipmentOrClassActivityAssociation.equipmentAssociationId
+										"
+										(click)="saveAssociation()"
+										mat-raised-button
+										class="form-button"
+										color="primary"
+									>
+										{{
+											"LIB_DOWNTIMES_ADD_@activity@_TO_EQUIPMENT"
+												| translate
+												| replaceVariables
+													: { activity: selectedActivity.names[0].name }
+										}}
+									</button>
+									<button
+										*ngIf="
+											equipmentOrClassActivityAssociation.equipmentAssociationId
+										"
+										(click)="saveAssociation()"
+										mat-raised-button
+										class="form-button updatebuttonlongtextcontrol"
+										color="accent"
+									>
+										{{
+											"LIB_DOWNTIMES_UPDATE_@activity@_FOR_EQUIPMENT"
+												| translate
+												| replaceVariables
+													: { activity: selectedActivity.names[0].name }
+										}}
+									</button>
+									<button
+										*ngIf="
+											equipmentOrClassActivityAssociation.equipmentAssociationId
+										"
+										(click)="removeAssociation()"
+										mat-raised-button
+										class="form-button"
+										color="warn"
+									>
+										<mat-icon>delete</mat-icon>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<mat-divider [vertical]="true" style="height: 100%;"></mat-divider>
+	</div>
+	<div fxFlex="29.5">
+		<div class="fullWidth centerItems">
+			<h4>{{ "LIB_DOWNTIMES_ACTIVITIES_ASSOCIATED" | translate }}</h4>
+		</div>
+		<div>
+			<div class="formarea mat-elevation-z8">
+				<div *ngIf="!selectedEquipmentClass && !selectedEquipment" [@enter]>
+					<h5>{{ "LIB_DOWNTIMES_NO_CLASS_OR_EQUIPMENT_SELECTED" | translate }}</h5>
+				</div>
+				<div
+					*ngIf="
+						selectedEquipmentClass &&
+						selectedEquipmentClass !== showAllEquipments &&
+						selectedEquipmentClass !== equipmentsWithNoClass &&
+						activeTab === 'Classes'
+					"
+					[@enter]
+				>
+					<h5 class="fullWidth centerItems">
+						{{ "LIB_DOWNTIMES_CLASS" | translate }}: {{ selectedEquipmentClass.id }}
+					</h5>
+				</div>
+				<div
+					*ngIf="
+						selectedEquipmentClass &&
+						(selectedEquipmentClass === showAllEquipments ||
+							selectedEquipmentClass === equipmentsWithNoClass) &&
+						activeTab === 'Classes'
+					"
+					[@enter]
+				>
+					<h5 class="fullWidth centerItems">
+						{{
+							"LIB_DOWNTIMES_GO_TO_EQUIPMENTS_TAB_TO_SELECT_AN_EQUIPMENT" | translate
+						}}
+					</h5>
+				</div>
+				<div *ngIf="!selectedEquipment && activeTab === 'Equipments'" [@enter]>
+					<h5 class="fullWidth centerItems">
+						{{ "LIB_DOWNTIMES_NO_EQUIPMENT_SELECTED" | translate }}
+					</h5>
+				</div>
+				<div *ngIf="selectedEquipment && activeTab === 'Equipments'" [@enter]>
+					<h5 class="fullWidth centerItems">
+						{{ "LIB_DOWNTIMES_EQUIPMENT" | translate }}: {{ selectedEquipment.id }}
+					</h5>
+				</div>
+				<mat-progress-spinner
+					*ngIf="activitiesTreeLoadingIndicator"
+					class="example-margin"
+					color="accent"
+					[@enter]
+				>
+				</mat-progress-spinner>
+				<lib-downtimes-activities-tree
+					[hidden]="
+						!(
+							((selectedEquipmentClass &&
+								selectedEquipmentClass !== showAllEquipments &&
+								selectedEquipmentClass !== equipmentsWithNoClass &&
+								activeTab === 'Classes') ||
+								(selectedEquipment && activeTab === 'Equipments')) &&
+							!activitiesTreeLoadingIndicator
+						)
+					"
+					(selectedNodeId)="selectActivity($event)"
+				></lib-downtimes-activities-tree>
+			</div>
+		</div>
+	</div>
+	<div>
+		<mat-divider [vertical]="true" style="height: 100%;"></mat-divider>
+	</div>
+	<div fxFlex="29.5">
+		<div class="fullWidth centerItems">
+			<h4>{{ "LIB_DOWNTIMES_EQUIPMENT_LOCATIONS" | translate }}</h4>
+		</div>
+		<div>
+			<div class="formarea mat-elevation-z8">
+				<div *ngIf="!selectedEquipment || activeTab === 'Classes'" [@enter]>
+					<h5 class="fullWidth centerItems">
+						{{ "LIB_DOWNTIMES_SELECT_AN_EQUIPMENT_TO_SET_ITS_LOCATIONS" | translate }}
+					</h5>
+				</div>
+
+				<div *ngIf="equipmentLocations && activeTab === 'Equipments'">
+					<div *ngIf="equipmentLocations && equipmentLocations.length > 0" [@enter]>
+						<div>
+							<table mat-table [dataSource]="locationsDataSource">
+								<ng-container matColumnDef="name">
+									<th mat-header-cell *matHeaderCellDef>Name</th>
+									<td mat-cell *matCellDef="let element">
+										<div *ngIf="element.names && element.names.length > 0">
+											{{ element.names[0].name }}
+										</div>
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="star" stickyEnd>
+									<th mat-header-cell *matHeaderCellDef></th>
+									<td mat-cell *matCellDef="let element">
+										<button
+											(click)="editLocation(element)"
+											mat-button
+											color="primary"
+										>
+											<mat-icon>edit</mat-icon>
+										</button>
+										<button
+											(click)="deleteLocation(element)"
+											mat-button
+											color="warn"
+										>
+											<mat-icon>delete</mat-icon>
+										</button>
+									</td>
+								</ng-container>
+
+								<tr mat-header-row *matHeaderRowDef="locationsColumns"></tr>
+								<tr mat-row *matRowDef="let row; columns: locationsColumns"></tr>
+							</table>
+						</div>
+					</div>
+
+					<div
+						*ngIf="
+							equipmentLocations &&
+							equipmentLocations.length === 0 &&
+							activeTab === 'Equipments'
+						"
+						[@enter]
+					>
+						<h5 class="fullWidth centerItems">
+							{{ "LIB_DOWNTIMES_NO_LOCATIONS_SPECIFIED" | translate }}
+						</h5>
+					</div>
+
+					<div class="fullWidth centerItems spacing20">
+						<button
+							(click)="addNewLocation()"
+							mat-raised-button
+							class="form-button"
+							color="primary"
+						>
+							{{ "LIB_DOWNTIMES_ADD_NEW_LOCATION" | translate }}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

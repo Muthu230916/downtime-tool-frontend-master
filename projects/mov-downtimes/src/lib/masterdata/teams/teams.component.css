@@ -1,0 +1,27 @@
+.mat-card {
+	display: inline-block;
+	margin: 5px;
+	padding: 15px;
+	cursor: pointer;
+}
+
+.mat-card:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.teams-wrapper {
+	display: flex;
+	width: 80%;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.mat-form-field {
+	padding-top: 1.25em;
+	margin-top: 1.25em 0.25em;
+	width: 100%;
+}
+
+.mat-raised-button {
+	margin-bottom: 1.25em;
+}

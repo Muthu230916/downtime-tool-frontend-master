@@ -1,0 +1,105 @@
+lib-downtimes-reports .contentwrapper,
+lib-downtimes-overview .contentwrapper,
+lib-downtimes-downtimes-registration .contentwrapper {
+	/* height: calc(100vh - 166px); */
+	min-width: 1515px;
+}
+
+lib-downtimes-reports .formarea,
+lib-downtimes-overview .formarea,
+lib-downtimes-downtimes-registration .formarea {
+	padding: 3.5% !important;
+	margin: 15px !important;
+	border-radius: 7px;
+}
+
+lib-downtimes-reports tree-viewport .ng-star-inserted,
+lib-downtimes-overview tree-viewport .ng-star-inserted,
+lib-downtimes-downtimes-registration tree-viewport .ng-star-inserted {
+	height: 100% !important;
+}
+
+lib-downtimes-reports ::-webkit-scrollbar,
+lib-downtimes-overview ::-webkit-scrollbar,
+lib-downtimes-downtimes-registration ::-webkit-scrollbar {
+	width: 7px;
+}
+
+lib-downtimes-reports ::-webkit-scrollbar-track,
+lib-downtimes-overview ::-webkit-scrollbar-track,
+lib-downtimes-downtimes-registration ::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px grey;
+	border-radius: 10px;
+}
+
+lib-downtimes-reports ::-webkit-scrollbar-thumb,
+lib-downtimes-overview ::-webkit-scrollbar-thumb,
+lib-downtimes-downtimes-registration ::-webkit-scrollbar-thumb {
+	background: #f7a600;
+	border-radius: 10px;
+}
+
+lib-downtimes-reports ::-webkit-scrollbar-thumb:hover,
+lib-downtimes-overview ::-webkit-scrollbar-thumb:hover,
+lib-downtimes-downtimes-registration ::-webkit-scrollbar-thumb:hover {
+	background: rgb(54, 56, 58);
+}
+
+lib-downtimes-reports .fullWidth,
+lib-downtimes-overview .fullWidth,
+lib-downtimes-downtimes-registration .fullWidth {
+	width: 100%;
+}
+
+lib-downtimes-reports .width90center,
+lib-downtimes-overview .width90center,
+lib-downtimes-downtimes-registration .width90center {
+	width: 90%;
+	margin: 0 auto;
+}
+
+lib-downtimes-reports .centerItems,
+lib-downtimes-overview .centerItems,
+lib-downtimes-downtimes-registration .centerItems {
+	text-align: center;
+	align-items: center;
+}
+
+lib-downtimes-reports table,
+lib-downtimes-overview table,
+lib-downtimes-downtimes-registration table {
+	width: 100%;
+}
+
+lib-downtimes-reports .mat-form-field-infix,
+lib-downtimes-overview .mat-form-field-infix,
+lib-downtimes-downtimes-registration .mat-form-field-infix {
+	border: 0;
+}
+
+lib-downtimes-reports textarea:focus,
+lib-downtimes-overview textarea:focus,
+lib-downtimes-downtimes-registration textarea:focus,
+lib-downtimes-reports input:focus,
+lib-downtimes-overview input:focus,
+lib-downtimes-downtimes-registration input:focus {
+	outline: none;
+}
+
+lib-downtimes-reports .datetimeinput,
+lib-downtimes-overview .datetimeinput,
+lib-downtimes-downtimes-registration .datetimeinput {
+	width: 125px;
+}
+
+lib-downtimes-reports td.mat-cell,
+lib-downtimes-overview td.mat-footer-cell,
+lib-downtimes-downtimes-registration th.mat-header-cell,
+lib-downtimes-overview td.mat-cell,
+lib-downtimes-downtimes-registration td.mat-footer-cell,
+lib-downtimes-reports th.mat-header-cell,
+lib-downtimes-downtimes-registration td.mat-cell,
+lib-downtimes-reports td.mat-footer-cell,
+lib-downtimes-overview th.mat-header-cell {
+	border-bottom-width: 1.2px;
+}

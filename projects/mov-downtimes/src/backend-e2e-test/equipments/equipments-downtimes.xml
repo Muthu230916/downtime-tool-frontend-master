@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+	<!-- TEST -->
+	<RESTCallJSON>
+		<Path>DOWNTIMES/Equipment/process</Path>
+		<Method>POST</Method>
+		<Body>{
+			"equipmentId": {
+				"id": "Equipment1Test",
+				"type": "EQUIPMENT"
+			}
+		}</Body>
+		<Expected>
+			<StatusCode>200</StatusCode>
+		</Expected>
+	</RESTCallJSON>
+	<RESTCallJSON>
+		<Path>DOWNTIMES/Equipment/process</Path>
+		<Method>POST</Method>
+		<Body>{{
+			"equipmentId": {
+				"id": "NONEXISTING",
+				"type": "EQUIPMENT"
+			}
+		}</Body>
+		<Expected>
+			<StatusCode>500</StatusCode>
+			<Error exception="ObjectNotAvailableException"/>
+		</Expected>
+	</RESTCallJSON>
+</RESTJSONTestScenario>

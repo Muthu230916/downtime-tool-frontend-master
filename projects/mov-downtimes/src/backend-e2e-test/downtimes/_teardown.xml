@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- AFTER TEST -->
+    <!-- REMOVE DOWNTIME -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Downtime/remove/1</Path>
+        <Method>DELETE</Method>
+
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+			<JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- REMOVE ACTIVITY -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Activity/remove/1</Path>
+        <Method>DELETE</Method>
+
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+			<JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- REMOVE TEAM -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Team/remove/1</Path>
+        <Method>DELETE</Method>
+
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+			<JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+    
+</RESTJSONTestScenario>

@@ -1,0 +1,60 @@
+#statisticscontainer {
+	width: calc(100vw - 25px);
+	height: calc(100vh - 150px);
+	overflow-x: hidden;
+}
+
+#gaugecardscontainer {
+	display: flow-root;
+	width: 99%;
+	margin: 0 auto;
+	margin-bottom: 90px;
+}
+
+#gaugecardscontainer div {
+	max-width: 23.55%;
+	min-width: 346px;
+	margin: 10px;
+}
+
+/* #gaugecardscontainer span {
+  position: absolute;
+  margin: 10px;
+} */
+
+#loadexisting {
+	position: absolute;
+	left: 2%;
+	bottom: 3%;
+}
+
+#updateview {
+	position: absolute;
+	left: 2%;
+	bottom: 3%;
+}
+
+#removeselectionbutton {
+	margin-left: 10px;
+}
+
+::ng-deep #removeselectionbutton span:first-child {
+	padding: 0 !important;
+}
+
+#saveview {
+	position: absolute;
+	right: 3%;
+	bottom: 3%;
+}
+
+#calculateall {
+	position: absolute;
+	right: 48.5%;
+	bottom: 3%;
+}
+
+.gaugewrapper {
+	float: left;
+	height: 470px;
+}

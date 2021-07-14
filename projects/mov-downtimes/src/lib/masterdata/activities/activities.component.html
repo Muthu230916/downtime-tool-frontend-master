@@ -1,0 +1,309 @@
+<div class="contentwrapper" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+	<div fxFlex="40">
+		<div class="fullWidth centerItems">
+			<h5>{{ "LIB_DOWNTIMES_DETAILS" | translate }}</h5>
+
+			<div class="formarea mat-elevation-z8">
+				<div *ngIf="!activeActivity">
+					<p>
+						{{
+							"LIB_DOWNTIMES_ADD_NEW_ACTIVITY_OR_EDIT_EXISTING_ONE_BY_SELECTING_IT_FIRST"
+								| translate
+						}}
+					</p>
+					<button
+						mat-raised-button
+						class="add-activity-button"
+						color="primary"
+						(click)="prepareNewActivity()"
+					>
+						{{ "LIB_DOWNTIMES_ADD_ACTIVITY" | translate }}
+					</button>
+				</div>
+				<mat-tab-group
+					*ngIf="activeActivity"
+					mat-align-tabs="center"
+					class="width90center"
+					[selectedIndex]="0"
+				>
+					<mat-tab label="{{ 'LIB_DOWNTIMES_GENERAL' | translate }}">
+						<div class="form-container" *ngIf="activeActivity" id="detailscontainer">
+							<mat-form-field appearance="outline">
+								<mat-label>{{ "LIB_DOWNTIMES_NAME" | translate }}</mat-label>
+								<input
+									matInput
+									placeholder="{{ 'LIB_DOWNTIMES_ENTER_NAME' | translate }}"
+									[(ngModel)]="name"
+									required
+								/>
+								<button
+									mat-button
+									matSuffix
+									(click)="localizeName()"
+									style="top: 0;"
+								>
+									{{ languageId }}
+								</button>
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>{{ "LIB_DOWNTIMES_DESCRIPTION" | translate }}</mat-label>
+								<input
+									matInput
+									placeholder="{{
+										'LIB_DOWNTIMES_ENTER_DESCRIPTION' | translate
+									}}"
+									[(ngModel)]="description"
+								/>
+								<button
+									mat-button
+									matSuffix
+									(click)="localizeDescription()"
+									style="top: 0;"
+								>
+									{{ languageId }}
+								</button>
+							</mat-form-field>
+							<div class="toggle-button-group">
+								<label for="active">{{ "LIB_DOWNTIMES_ACTIVE" | translate }}</label>
+								<mat-button-toggle-group
+									name="active"
+									aria-label="Active"
+									id="active"
+									value="{{ activeActivity.isActive }}"
+									[(ngModel)]="activeActivity.isActive"
+								>
+									<mat-button-toggle value="true">{{
+										"LIB_DOWNTIMES_YES" | translate
+									}}</mat-button-toggle>
+									<mat-button-toggle value="false">{{
+										"LIB_DOWNTIMES_NO" | translate
+									}}</mat-button-toggle>
+								</mat-button-toggle-group>
+								<mat-form-field appearance="outline" style="padding-left: 7px;">
+									<mat-label>{{ "LIB_DOWNTIMES_COLOR" | translate }}</mat-label>
+									<input
+										matInput
+										type="color"
+										[(ngModel)]="activeActivity.color"
+									/>
+								</mat-form-field>
+							</div>
+
+							<mat-form-field appearance="outline">
+								<mat-label>{{ "LIB_DOWNTIMES_SAP_PM_CODE" | translate }}</mat-label>
+								<input
+									matInput
+									placeholder="{{
+										'LIB_DOWNTIMES_ENTER_SAP_PM_CODE' | translate
+									}}"
+									[(ngModel)]="activeActivity.sapPMCode"
+								/>
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>{{
+									"LIB_DOWNTIMES_SAP_DOWNTIME_CODE" | translate
+								}}</mat-label>
+								<input
+									matInput
+									placeholder="{{
+										'LIB_DOWNTIMES_ENTER_SAP_DOWNTIME_CODE' | translate
+									}}"
+									[(ngModel)]="activeActivity.sapDowntimeCode"
+								/>
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>{{
+									"LIB_DOWNTIMES_AUTOMATED_CODE" | translate
+								}}</mat-label>
+								<input
+									matInput
+									placeholder="{{
+										'LIB_DOWNTIMES_ENTER_AUTOMATED_CODE' | translate
+									}}"
+									[(ngModel)]="activeActivity.automatedCode"
+								/>
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>{{ "LIB_DOWNTIMES_ALLOWANCE" | translate }}</mat-label>
+								<input
+									matInput
+									type="number"
+									min="0"
+									placeholder="{{ 'LIB_DOWNTIMES_ENTER_ALLOWANCE' | translate }}"
+									[(ngModel)]="activeActivity.allowance"
+								/>
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>{{
+									"LIB_DOWNTIMES_MAXIMUM_ALLOWANCE" | translate
+								}}</mat-label>
+								<input
+									type="number"
+									min="0"
+									matInput
+									placeholder="{{
+										'LIB_DOWNTIMES_ENTER_MAXIMUM_ALLOWANCE' | translate
+									}}"
+									[(ngModel)]="activeActivity.maximumAllowance"
+								/>
+							</mat-form-field>
+						</div>
+					</mat-tab>
+					<mat-tab label="{{ 'LIB_DOWNTIMES_CAUSES' | translate }} {{ causesCount }}"
+						><div class="form-container formarea">
+							<div class="toggle-button-group">
+								<mat-button-toggle-group
+									name="active"
+									aria-label="Active"
+									id="active"
+									[(ngModel)]="activeActivity.isCauseMandatory"
+									><mat-button-toggle value="true">{{
+										"LIB_DOWNTIMES_MANDATORY" | translate
+									}}</mat-button-toggle>
+									<mat-button-toggle value="false">{{
+										"LIB_DOWNTIMES_OPTIONAL" | translate
+									}}</mat-button-toggle>
+								</mat-button-toggle-group>
+							</div>
+							<mat-form-field *ngIf="allCauses">
+								<mat-label>{{ "LIB_DOWNTIMES_ADD_CAUSE" | translate }}</mat-label>
+								<mat-select
+									[formControl]="allCausesCtrl"
+									(selectionChange)="addLinkedCause($event.value)"
+								>
+									<mat-option>
+										<ngx-mat-select-search
+											[placeholderLabel]="'Find cause ...'"
+											[formControl]="allCausesFilterCtrl"
+											[noEntriesFoundLabel]="'No causes found'"
+										></ngx-mat-select-search>
+									</mat-option>
+									<mat-option
+										*ngFor="let cause of filteredCauses | async"
+										[value]="cause"
+										>{{ cause.name }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+							<div class="list-wrapper">
+								<mat-card *ngFor="let linkedCause of activeActivity.causes">
+									<mat-card-content>
+										{{ linkedCause.names[0].name }}
+										<mat-card-actions>
+											<button
+												mat-button
+												matSuffix
+												mat-icon-button
+												aria-label="Remove"
+												(click)="removeLinkedCause(linkedCause)"
+											>
+												<mat-icon>close</mat-icon>
+											</button>
+										</mat-card-actions>
+									</mat-card-content>
+								</mat-card>
+							</div>
+						</div>
+					</mat-tab>
+					<mat-tab
+						label="{{ 'LIB_DOWNTIMES_SOLUTIONS' | translate }} {{ solutionsCount }}"
+					>
+						<div class="form-container formarea">
+							<div class="toggle-button-group">
+								<mat-button-toggle-group
+									name="active"
+									aria-label="Active"
+									id="active"
+									[(ngModel)]="activeActivity.isSolutionMandatory"
+									><mat-button-toggle value="true">{{
+										"LIB_DOWNTIMES_MANDATORY" | translate
+									}}</mat-button-toggle>
+									<mat-button-toggle value="false">{{
+										"LIB_DOWNTIMES_OPTIONAL" | translate
+									}}</mat-button-toggle>
+								</mat-button-toggle-group>
+							</div>
+							<mat-form-field *ngIf="allSolutions">
+								<mat-label>{{
+									"LIB_DOWNTIMES_ADD_SOLUTION" | translate
+								}}</mat-label>
+								<mat-select
+									[formControl]="allSolutionsCtrl"
+									(selectionChange)="addLinkedSolution($event.value)"
+								>
+									<mat-option>
+										<ngx-mat-select-search
+											[placeholderLabel]="'Find solution ...'"
+											[formControl]="allSolutionsFilterCtrl"
+											[noEntriesFoundLabel]="'No solutions found'"
+										></ngx-mat-select-search>
+									</mat-option>
+									<mat-option
+										*ngFor="let solution of filteredSolutions | async"
+										[value]="solution"
+										>{{ solution.name }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+							<div class="list-wrapper">
+								<mat-card *ngFor="let linkedSolution of activeActivity.solutions">
+									<mat-card-content>
+										{{ linkedSolution.names[0].name }}
+										<mat-card-actions>
+											<button
+												mat-button
+												matSuffix
+												mat-icon-button
+												aria-label="Remove"
+												(click)="removeLinkedSolution(linkedSolution)"
+											>
+												<mat-icon>close</mat-icon>
+											</button>
+										</mat-card-actions>
+									</mat-card-content>
+								</mat-card>
+							</div>
+						</div>
+					</mat-tab>
+				</mat-tab-group>
+				<div class="buttons" *ngIf="activeActivity">
+					<button mat-stroked-button class="form-button" (click)="cancel()">
+						{{ "LIB_DOWNTIMES_CANCEL" | translate }}
+					</button>
+					<button
+						*ngIf="activeActivity && activeActivity.activityId"
+						mat-raised-button
+						class="form-button"
+						color="warn"
+						(click)="prepareNewActivity(activeActivity.activityId)"
+					>
+						{{ "LIB_DOWNTIMES_ADD_CHILD" | translate }}
+					</button>
+					<button
+						mat-raised-button
+						class="form-button"
+						color="primary"
+						(click)="saveActivity()"
+						[disabled]="!name"
+					>
+						{{ "LIB_DOWNTIMES_SAVE_ACTIVITY" | translate }}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<mat-divider [vertical]="true" style="height: 100%;"></mat-divider>
+	</div>
+	<div fxFlex="40">
+		<div class="fullWidth centerItems">
+			<h5>{{ "LIB_DOWNTIMES_TREE" | translate }}</h5>
+		</div>
+
+		<div class="formarea mat-elevation-z8">
+			<lib-downtimes-activities-tree
+				(selectedNodeId)="selectActivity($event)"
+			></lib-downtimes-activities-tree>
+		</div>
+	</div>
+</div>

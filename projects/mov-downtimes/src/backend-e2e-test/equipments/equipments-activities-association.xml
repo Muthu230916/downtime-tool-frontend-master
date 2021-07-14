@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- Make(Create) Equipment Association with Activity -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/EquipmentAssociation/process</Path>
+        <Method>POST</Method>
+        <Body>{ 
+            "activityId":1,
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            },
+            "allowance":3,
+            "maximumAllowance":4,
+            "machineCode":61
+        }</Body>
+        <SetVariable name="equipmentAssociatedId" JSONPath="uiid"></SetVariable>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "[equipmentAssociatedId]"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- Update Equipment Association with Activity -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/EquipmentAssociation/process</Path>
+        <Method>POST</Method>
+        <Body>{ 
+            "activityId":1,
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            },
+            "equipmentAssociationId":[equipmentAssociatedId],
+            "machineCode":62,
+            "allowance":2,
+            "maximumAllowance":3
+        }</Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Success"</JSONPath>
+			<JSONPath>uiid = "[equipmentAssociatedId]"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- Remove Equipment Association with Activity -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/EquipmentAssociation/remove/[equipmentAssociatedId]</Path>
+        <Method>DELETE</Method>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+</RESTJSONTestScenario>

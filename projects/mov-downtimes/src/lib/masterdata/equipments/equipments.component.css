@@ -1,0 +1,39 @@
+.example-container {
+	height: 400px;
+	overflow: auto;
+}
+
+th {
+	text-align: left;
+}
+
+th.mat-sort-header-sorted {
+	color: black;
+}
+
+.mat-form-field {
+	font-size: 14px;
+	width: 100%;
+}
+
+.mat-column-select {
+	overflow: initial;
+}
+
+.spacing20 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.updatebuttonlongtextcontrol {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 280px;
+}
+
+.mat-column-star {
+	text-align: end;
+}

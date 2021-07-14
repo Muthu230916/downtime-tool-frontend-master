@@ -1,0 +1,63 @@
+<RESTJSONTestScenario>
+	<!-- BEFORE TEST -->
+	<RESTCallJSON>
+		<Path>DOWNTIMES/Report/process</Path>
+		<Method>POST</Method>
+		<Body>{ "content": "[{"selection":{"dateFrom":"2019-12-09T23:00:00.000Z","dateTo":"2019-12-10T22:59:59.999Z","equipments":["Equipment1A"],"activity":"","timeFilterType":"DATE"}}]"
+"name": "ViewForE2ETest"
+"shared": true
+"type": "STATISTICS" }</Body>
+		<Expected>
+			<StatusCode>200</StatusCode>
+			<JSONPath>messageContent = "Report : 1 created "</JSONPath>
+			<JSONPath>messageType = "Success"</JSONPath>
+			<JSONPath>uiid = "1"</JSONPath>
+		</Expected>
+	</RESTCallJSON>
+
+	<!-- TEST -->
+	<RESTCallJSON>
+		<Path>DOWNTIMES/Report/process</Path>
+		<Method>POST</Method>
+		<Body>{ "content": "[{"selection":{"dateFrom":"2019-12-09T23:00:00.000Z","dateTo":"2019-12-10T22:59:59.999Z","equipments":["Equipment1A"],"activity":"","timeFilterType":"DATE"}}]"
+"name": "ViewForE2ETest",
+"shared": true,
+"reportId": "1",
+"type": "STATISTICS" }</Body>
+		<Expected>
+			<StatusCode>200</StatusCode>
+			<JSONPath>messageContent = "Report : 1 updated "</JSONPath>
+			<JSONPath>messageType = "Success"</JSONPath>
+			<JSONPath>uiid = "1"</JSONPath>
+		</Expected>
+	</RESTCallJSON>
+
+
+
+	<RESTCallJSON>
+		<Path>DOWNTIMES/Report/process</Path>
+		<Method>POST</Method>
+		<Body>{ "content": "[{"selection":{"dateFrom":"2019-12-09T23:00:00.000Z","dateTo":"2019-12-10T22:59:59.999Z","equipments":["Equipment1A"],"activity":"","timeFilterType":"DATE"}}]"
+"name": "ViewForE2ETest",
+"shared": true,
+"reportId": "2",
+"type": "STATISTICS" }</Body>
+		<Expected>
+			<StatusCode>500</StatusCode>
+			<Error exception="ObjectNotAvailableException"/>
+		</Expected>
+	</RESTCallJSON>
+
+
+	<!-- AFTER TEST -->
+	<!-- also delete Equipment -->
+	<RESTCallJSON>
+		<Path>DOWNTIMES/Report/remove/1</Path>
+		<Method>DELETE</Method>
+		<Expected>
+			<StatusCode>200</StatusCode>
+		</Expected>
+	</RESTCallJSON>
+
+
+</RESTJSONTestScenario>

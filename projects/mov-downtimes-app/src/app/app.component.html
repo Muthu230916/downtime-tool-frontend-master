@@ -1,0 +1,32 @@
+<mov-base>
+	<div mov-header style="flex: 1 1 auto;"></div>
+
+	<div mov-menu>
+		<mat-list style="display: flex; flex-direction: column; justify-content: flex-start;">
+			<div>
+				<mat-list-item class="action">
+					<a mat-list-item routerLink="/">
+						<mat-icon>account_tree</mat-icon>
+						<span style="padding-left: 5px;">Masterdata</span>
+					</a>
+				</mat-list-item>
+				<mat-divider></mat-divider>
+				<mat-list-item class="action">
+					<a mat-list-item routerLink="/downtimes">
+						<mat-icon>warning</mat-icon>
+						<span style="padding-left: 5px;">Downtimes</span>
+					</a>
+				</mat-list-item>
+				<mat-divider></mat-divider>
+				<mat-list-item class="action">
+					<a mat-list-item routerLink="/reports">
+						<mat-icon>dynamic_feed</mat-icon>
+						<span style="padding-left: 5px;">Reports</span>
+					</a>
+				</mat-list-item>
+				<mat-divider></mat-divider>
+			</div>
+		</mat-list>
+	</div>
+	<div><router-outlet></router-outlet></div>
+</mov-base>

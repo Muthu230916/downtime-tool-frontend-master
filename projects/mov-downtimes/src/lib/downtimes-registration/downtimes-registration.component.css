@@ -1,0 +1,91 @@
+table {
+	width: 100%;
+	margin-bottom: 3em;
+}
+
+.mat-card {
+	width: 50%;
+}
+
+.badge {
+	padding: 0.25em 0.4em;
+	border-radius: 0.25rem;
+	align-content: center;
+	display: inline-block;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.success {
+	color: #fff;
+	background-color: #5cb85c;
+}
+
+.failed {
+	color: #fff;
+	background-color: #d9534f;
+}
+
+tr.downtime-detail-row {
+	height: 0;
+}
+
+tr.downtime-element-row:not(.downtime-expanded-row):hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+tr.downtime-element-row:not(.downtime-expanded-row):active {
+	background: #efefef;
+}
+
+.downtime-element-row td {
+	cursor: pointer;
+}
+
+.downtime-element-detail {
+	overflow: hidden;
+	display: flex;
+}
+
+.downtime-element-diagram {
+	min-width: 80px;
+	padding: 8px;
+	font-weight: lighter;
+	margin: 8px;
+	height: 80px;
+}
+
+.downtime-element-title {
+	margin-bottom: 0.2em;
+	font-size: 0.8em;
+	border-bottom: 1px dotted black;
+}
+
+.downtime-element-description {
+	font-size: 1em;
+}
+
+.mat-paginator {
+	display: inline-block;
+}
+
+.button-wrapper {
+	text-align: right;
+	border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.table-button {
+	margin-top: 10px;
+	margin-right: 40px;
+	padding: 0 60px;
+}
+
+.table-button:first-child() {
+	margin-right: 40px;
+}
+
+.subtitle {
+	margin-left: 5px;
+	font-size: 16px;
+	font-weight: lighter;
+}

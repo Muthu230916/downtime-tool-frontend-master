@@ -1,0 +1,55 @@
+.form-container {
+	display: flex;
+	flex-direction: column;
+	margin: 20px auto;
+}
+
+.form-container > * {
+	width: 60%;
+	align-self: center;
+}
+
+.form-button {
+	margin: 10px auto;
+	width: 100%;
+}
+
+.form-container > .add-activity-button {
+	margin: 10px auto;
+	width: 30%;
+}
+
+.toggle-button-group {
+	text-align: left;
+}
+
+.toggle-button-group > :first-child {
+	margin-right: 10px;
+}
+
+.buttons {
+	display: inline-block;
+}
+
+.list-wrapper {
+	text-align: left;
+}
+
+.mat-card {
+	display: inline-block;
+	margin: 5px;
+	padding: 12px;
+}
+
+.mat-card-actions {
+	display: inline-block;
+	padding: 0;
+}
+
+#detailscontainer > .mat-form-field-infix > mat-form-field > div > div {
+	padding: 0;
+}
+
+.mat-form-field-infix {
+	padding: 0;
+}

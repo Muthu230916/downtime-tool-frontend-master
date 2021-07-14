@@ -1,0 +1,53 @@
+::ng-deep.timepicker-backdrop-overlay,
+::ng-deep.timepicker-overlay {
+	z-index: 1001 !important;
+}
+
+::ng-deep.mat-form-field-wrapper {
+	padding-bottom: 0px;
+}
+
+::ng-deep.input-datetime {
+	width: 100%;
+	border: 0;
+}
+
+::ng-deep.input-datetime:focus {
+	outline: none;
+}
+
+.custom-timepicker {
+	display: inline-flex;
+	margin-left: 10px;
+}
+
+.picker-wrapper {
+	padding: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	margin: 25px 40px;
+}
+
+.date-time-range {
+	box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 5px;
+}
+
+.mat-icon {
+	display: inline-flex;
+}
+
+.mat-icon:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
+
+.mat-form-field {
+	display: inline-flex;
+}
+
+.selected {
+	background: rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,107 @@
+version: 2.1
+
+jobs:
+    build:
+        working_directory: ~/project
+        environment:
+            JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+        machine:
+            image: ubuntu-1604:201903-01
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      - v1-dependencies-
+            # * Mov-base auth token replacement
+            - run:
+                  name: Change auth token
+                  command: |
+                      sudo sed -i "s/\$MOVILITAS_GITHUB_TOKEN/$MOVILITAS_GITHUB_TOKEN/g" .npmrc
+            # Build project with different configuration based on the current branch
+            - run:
+                  name: Set BASH_ENV
+                  command: |
+                      echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+                      echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            - run:
+                  name: Install Node v10
+                  command: |
+                      nvm install v10
+                      node -v
+                      nvm alias default v10
+            # Install project dependencies
+            - run:
+                  name: Install local dependencies
+                  command: npm install
+            # Cache local dependencies if they don't exist
+            - save_cache:
+                  key: v1-dependencies-{{ checksum "package.json" }}
+                  paths:
+                      - node_modules
+            # * Forticlient setup
+            - run:
+                  name: Install FortiClient
+                  command: |
+                      sudo mkdir -p /home/$CIRCLE_PROJECT_REPONAME/project/vpn/tmp && cd /home/$CIRCLE_PROJECT_REPONAME/project/vpn
+
+                      sudo apt-get update
+                      sudo apt-get install expect
+                      sudo apt-get install ppp expect
+
+                      sudo cp  ~/project/.circleci/forticlient-sslvpn_4.4.2333-1_amd64.deb .
+                      sudo dpkg -x forticlient-sslvpn_4.4.2333-1_amd64.deb /home/$CIRCLE_PROJECT_REPONAME/project/vpn
+
+                      sudo truncate -s 0 opt/forticlient-sslvpn/64bit/helper/License.txt
+                      sudo ./opt/forticlient-sslvpn/64bit/helper/setup >/dev/null < <(echo y)
+
+                      sudo cp  ~/project/.circleci/forti-vpn.sh . 
+                      sudo sed -i s/"<FORTI_HOST>"/$FORTI_HOST/ forti-vpn.sh
+                      sudo sed -i s/"<FORTI_USERNAME>"/$FORTI_USER/ forti-vpn.sh
+                      sudo sed -i s/"<FORTI_PASSWORD>"/$FORTI_PASS/ forti-vpn.sh
+                      sudo chown root:root forti-vpn.sh
+                      sudo chmod 600 forti-vpn.sh
+                      sudo chmod +x forti-vpn.sh
+                      nohup sudo ./forti-vpn.sh &     
+                      sleep 10
+
+                      HOST=$MII_SERVER
+                      ip=${HOST%%:*}
+                      ping -c 1 $ip ;  echo $?
+            # Lint the source code
+            # - run:
+            #     name: Linting
+            #     command: npm run lint
+            # Test the source code
+            - run:
+                  name: Testing
+                  command: npm run test
+            - run:
+                  name: Building
+                  command: |
+                      sudo mkdir -p /home/$CIRCLE_PROJECT_REPONAME/project/deploy/"${MII_PROJECT}"/WEB/"${WEB_FOLDER}"
+                      npm run build-app-with-lib
+
+                      sudo mv  -v dist/mov-downtimes-app/* /home/$CIRCLE_PROJECT_REPONAME/project/deploy/"${MII_PROJECT}"/WEB/"${WEB_FOLDER}"
+            # * Zip project if you don't use NWDI
+            - run:
+                  name: Zip the buildfiles
+                  command: |
+                      cd /home/$CIRCLE_PROJECT_REPONAME/project/deploy
+                      sudo zip -r build.zip * .
+            # * Upload to project without NWDI
+            - run:
+                  name: Upload File to MII (no NWDI)
+                  command: |
+                      sudo curl -X POST "http://${MII_SERVER}/XMII/Illuminator?service=Transport&Mode=ImportProject&encoding=false&j_username=${MII_USER}&j_password=${MII_PASS}" -F "file=@/home/$CIRCLE_PROJECT_REPONAME/project/deploy/build.zip" -o output.xml 
+                      echo $(<output.xml) 
+                      output=$(grep -oP '(?<=<Message>).*?(?=</Message>)' output.xml)
+                      if [ -z "${output##*'Successful'*}" ] ;then
+                          echo 0
+                      else
+                          echo 1
+                      fi
+              # * Close VPN
+            - run:
+                  name: Close forticlient
+                  command: sudo pkill forti

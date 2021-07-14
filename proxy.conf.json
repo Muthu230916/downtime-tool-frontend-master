@@ -1,0 +1,10 @@
+{
+	"/dottweb/rest": {
+		"target": "http://localhost:9090",
+		"secure": false
+	},
+	"/veri95web/rest": {
+		"target": "http://localhost:9090",
+		"secure": false
+	}
+}

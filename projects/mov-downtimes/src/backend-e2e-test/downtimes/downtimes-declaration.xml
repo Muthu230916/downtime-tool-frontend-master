@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- Declare -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Downtime/process</Path>
+        <Method>POST</Method>
+        <Body>{ 
+            "activityId":"1",
+            "comment":"Remarks",
+            "downtimeId":"1",
+            "endTime":"2019-10-20T17:13:41+01:00",
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            },
+            "startTime":"2019-10-20T17:00:41+01:00",
+            "team":{ 
+                "teamId":"1"
+            }
+        }</Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- we send the time with local format so it can be +1 +2 +.. depending on country -->
+    <!-- Undeclare -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Downtime/update</Path>
+        <Method>PUT</Method>
+        <Body>{ 
+            "downtimeId": "1",
+            "duration":"780",
+            "startTime":"2019-10-20T17:00:41+01:00",
+            "endTime":"2019-10-20T17:13:41+01:00",
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            }
+        }</Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>payload = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+</RESTJSONTestScenario>

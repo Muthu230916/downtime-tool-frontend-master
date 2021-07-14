@@ -1,0 +1,88 @@
+<div id="statisticscontainer">
+	<div id="gaugecardscontainer">
+		<div *ngFor="let gauge of statistics.gauges" [@enter] [@leave] class="gaugewrapper">
+			<lib-downtimes-gauge
+				[model]="gauge"
+				(removeGauge)="removeGauge($event)"
+				(cloneGauge)="cloneGauge($event)"
+			></lib-downtimes-gauge>
+		</div>
+		<div class="gaugewrapper">
+			<button mat-fab color="primary" (click)="addNewGauge()" class="mat-elevation-z8">
+				<mat-icon>add</mat-icon>
+			</button>
+		</div>
+	</div>
+	<div>
+		<div>
+			<button
+				*ngIf="!statistics.uiid"
+				mat-raised-button
+				color="primary"
+				id="loadexisting"
+				class="mat-elevation-z8"
+				(click)="viewsModal()"
+				[@downEnter]
+			>
+				{{ "LIB_DOWNTIMES_LOAD_EXISTING" | translate }}
+			</button>
+		</div>
+		<div id="updateview" *ngIf="statistics.uiid && statistics.uiid !== ''" [@downEnter]>
+			<button
+				mat-raised-button
+				color="accent"
+				class="mat-elevation-z8"
+				(click)="updateView()"
+			>
+				{{ "LIB_DOWNTIMES_UPDATE_CURRENT_VIEW" | translate }}: {{ statistics.name }}
+			</button>
+			<button
+				id="removeselectionbutton"
+				mat-mini-fab
+				color="accent"
+				class="mat-elevation-z8"
+				title="Clear selection"
+				(click)="clearViewSelection()"
+			>
+				<mat-icon>clear</mat-icon>
+			</button>
+		</div>
+		<div>
+			<button
+				*ngIf="statistics.gauges.length > 1"
+				mat-raised-button
+				color="primary"
+				id="calculateall"
+				class="mat-elevation-z8"
+				(click)="calculateAll()"
+				[@downEnter]
+			>
+				{{ "LIB_DOWNTIMES_CALCULATE_ALL" | translate }}
+			</button>
+		</div>
+		<div>
+			<button
+				*ngIf="!statistics.uiid"
+				mat-raised-button
+				color="primary"
+				id="saveview"
+				class="mat-elevation-z8"
+				(click)="saveStatisticsView()"
+				[@downEnter]
+			>
+				{{ "LIB_DOWNTIMES_SAVE_VIEW" | translate }}
+			</button>
+			<button
+				*ngIf="statistics.uiid && statistics.uiid !== ''"
+				mat-raised-button
+				color="primary"
+				id="saveview"
+				class="mat-elevation-z8"
+				(click)="saveExistingAsNewStatisticsView()"
+				[@downEnter]
+			>
+				{{ "LIB_DOWNTIMES_SAVE_AS_NEW_VIEW" | translate }}
+			</button>
+		</div>
+	</div>
+</div>

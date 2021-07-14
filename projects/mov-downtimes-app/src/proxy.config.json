@@ -1,0 +1,10 @@
+{
+	"/veri95web": {
+		"target": "http://localhost:9090",
+		"secure": false
+	},
+	"/dottweb": {
+		"target": "http://localhost:9090",
+		"secure": false
+	}
+}

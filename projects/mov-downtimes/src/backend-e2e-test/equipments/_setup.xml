@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- BEFORE TEST -->
+
+    <!-- Couldn't find a way to create new equipments this way doesn't work on postman I got it from sample!! -->
+    <!-- Create Equipment -->
+	<RESTCallJSON>
+		<Path>VERI95/Equipment/create</Path>
+		<Method>POST</Method>
+		<Body>{
+			"id": "Equipment1Test"
+		}</Body>
+		<Expected>
+			<StatusCode>200</StatusCode>
+			<JSONPath>id = Equipment1Test</JSONPath>
+		</Expected>
+	</RESTCallJSON>
+
+    <!-- CREATE ACTIVITY -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Activity/process</Path>
+        <Method>POST</Method>
+        <Body>{
+            "sapPMCode":"",
+            "sapDowntimeCode":"",
+            "automatedCode":"",
+            "color":"#000000",
+            "isActive":false,
+            "isCauseMandatory":false,
+            "isSolutionMandatory":false,
+            "isSystemActive":false,
+            "names":[ 
+                { 
+                    "name":"ActivityTest1",
+                    "languageId":"EN"
+                }
+            ],
+            "causes":[],
+            "solutions":[]
+        }
+        </Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+</RESTJSONTestScenario>
+

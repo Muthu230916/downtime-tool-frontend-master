@@ -1,0 +1,107 @@
+<div class="contentwrapper" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+	<div fxFlex="49.5">
+		<div class="fullWidth centerItems">
+			<h4>{{ "LIB_DOWNTIMES_CAUSES" | translate }}</h4>
+		</div>
+		<div>
+			<div class="formarea mat-elevation-z8">
+				<table mat-table [dataSource]="causesDataSource">
+					<ng-container matColumnDef="name">
+						<th mat-header-cell *matHeaderCellDef>Name</th>
+						<td mat-cell *matCellDef="let element">{{ element.name }}</td>
+					</ng-container>
+
+					<ng-container matColumnDef="createdon">
+						<th mat-header-cell *matHeaderCellDef>Created on</th>
+						<td mat-cell *matCellDef="let element">{{ element.createdon }}</td>
+					</ng-container>
+
+					<ng-container matColumnDef="star" stickyEnd>
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let element">
+							<button (click)="editCause(element)" mat-button color="primary">
+								<mat-icon>edit</mat-icon>
+							</button>
+							<button (click)="deleteCause(element)" mat-button color="warn">
+								<mat-icon>delete</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="causesColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: causesColumns"></tr>
+				</table>
+
+				<mat-paginator
+					[pageSizeOptions]="[5, 10, 20]"
+					showFirstLastButtons
+					#causesPaginator
+				></mat-paginator>
+			</div>
+			<div class="fullWidth centerItems">
+				<button
+					(click)="addNewCause()"
+					mat-raised-button
+					class="form-button"
+					color="primary"
+				>
+					{{ "LIB_DOWNTIMES_ADD_CAUSE" | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+	<div>
+		<mat-divider [vertical]="true" style="height: 100%;"></mat-divider>
+	</div>
+	<div fxFlex="49.5">
+		<div class="fullWidth centerItems">
+			<h4>{{ "LIB_DOWNTIMES_SOLUTIONS" | translate }}</h4>
+		</div>
+		<div>
+			<div class="formarea mat-elevation-z8">
+				<table mat-table [dataSource]="solutionsDataSource">
+					<ng-container matColumnDef="name">
+						<th mat-header-cell *matHeaderCellDef>Name</th>
+						<td mat-cell *matCellDef="let element">{{ element.name }}</td>
+					</ng-container>
+
+					<ng-container matColumnDef="createdon">
+						<th mat-header-cell *matHeaderCellDef>Created on</th>
+						<td mat-cell *matCellDef="let element">{{ element.createdon }}</td>
+					</ng-container>
+
+					<ng-container matColumnDef="star" stickyEnd>
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let element">
+							<button (click)="editSolution(element)" mat-button color="primary">
+								<mat-icon>edit</mat-icon>
+							</button>
+							<button (click)="deleteSolution(element)" mat-icon-button color="warn">
+								<mat-icon>delete</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="solutionsColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: solutionsColumns"></tr>
+				</table>
+
+				<mat-paginator
+					[pageSizeOptions]="[5, 10, 20]"
+					showFirstLastButtons
+					#solutionsPaginator
+				></mat-paginator>
+			</div>
+			<div class="fullWidth centerItems">
+				<button
+					(click)="addNewSolution()"
+					mat-raised-button
+					class="form-button"
+					color="primary"
+				>
+					{{ "LIB_DOWNTIMES_ADD_SOLUTION" | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

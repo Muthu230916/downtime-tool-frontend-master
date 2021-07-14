@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+
+<div mat-dialog-content>
+	<div>
+		<table mat-table [dataSource]="viewsDataSource">
+			<ng-container matColumnDef="name">
+				<th mat-header-cell *matHeaderCellDef>Label</th>
+				<td mat-cell *matCellDef="let element">{{ element.label }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="createdon">
+				<th mat-header-cell *matHeaderCellDef>Duration</th>
+				<td mat-cell *matCellDef="let element">{{ element.duration }}</td>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="viewsColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: viewsColumns"></tr>
+		</table>
+	</div>
+</div>
+
+<div mat-dialog-actions class="mainmodalbuttons">
+	<button mat-button (click)="onCancel()">{{ "LIB_DOWNTIMES_CLOSE" | translate }}</button>
+</div>

@@ -1,0 +1,59 @@
+<div class="teams-wrapper" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+	<div fxFlex="21.5">
+		<div class="fullWidth centerItems">
+			<h3>{{ "LIB_DOWNTIMES_ADD_TEAM" | translate }}</h3>
+		</div>
+		<div class="formarea mat-elevation-z8">
+			<mat-form-field appearance="outline">
+				<mat-label>{{ "LIB_DOWNTIMES_ADD_A_NEW_TEAM" | translate }}</mat-label>
+				<input
+					matInput
+					placeholder="{{ 'ENTER_TEAM_NAME' | translate }}"
+					[(ngModel)]="name"
+				/>
+			</mat-form-field>
+			<div class="fullWidth centerItems">
+				<button mat-raised-button color="primary" [disabled]="!name" (click)="addTeam()">
+					{{ "LIB_DOWNTIMES_SAVE_TEAM" | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+	<mat-divider [vertical]="true"></mat-divider>
+	<div fxFlex="57">
+		<div class="fullWidth centerItems">
+			<h3>{{ "LIB_DOWNTIMES_TEAMS" | translate }}</h3>
+		</div>
+		<div class="formarea mat-elevation-z8">
+			<mat-card *ngFor="let team of teams" (click)="prepareEdit(team)">
+				<mat-card-content>
+					{{ team.name }}
+				</mat-card-content>
+			</mat-card>
+		</div>
+	</div>
+	<mat-divider [vertical]="true"></mat-divider>
+	<div fxFlex="21.5">
+		<div class="fullWidth centerItems">
+			<h3>{{ "LIB_DOWNTIMES_UPDATE_TEAM" | translate }}</h3>
+		</div>
+		<ng-template [ngIf]="currTeam">
+			<div class="formarea mat-elevation-z8">
+				<mat-form-field appearance="outline">
+					<mat-label>{{ "LIB_DOWNTIMES_TEAM_NAME" | translate }}</mat-label>
+					<input matInput placeholder="{{ currTeam.name }}" [(ngModel)]="currTeam.name" />
+				</mat-form-field>
+				<div class="fullWidth centerItems">
+					<button
+						mat-raised-button
+						color="primary"
+						[disabled]="!currTeam.name"
+						(click)="editTeam()"
+					>
+						{{ "LIB_DOWNTIMES_EDIT_TEAM" | translate }}
+					</button>
+				</div>
+			</div>
+		</ng-template>
+	</div>
+</div>

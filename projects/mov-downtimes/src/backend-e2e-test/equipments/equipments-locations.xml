@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- Make(Create) Equipment association with Locations -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Location/process</Path>
+        <Method>POST</Method>
+        <Body>{
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            },
+            "names":[ 
+                { 
+                    "languageId":"NL",
+                    "name":"Test"
+                },
+                { 
+                    "languageId":"EN",
+                    "name":"Test"
+                }
+            ]
+        }</Body>
+        <SetVariable name="locationId" JSONPath="uiid"></SetVariable>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "[locationId]"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- Update Equipment association with Locations -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Location/process</Path>
+        <Method>POST</Method>
+        <Body>{
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            },
+            "locationId":"[locationId]",
+            "names":[ 
+                {
+                    "name":"TestUpdate",
+                    "languageId":"EN"
+                },
+                {
+                    "changedby":"Butrint",
+                    "name":"TestUpdate",
+                    "languageId":"NL"
+                }
+            ]
+        }</Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Success"</JSONPath>
+			<JSONPath>uiid = "[locationId]"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    <!-- Remove Equipment association with Locations -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Location/remove/[locationId]</Path>
+        <Method>DELETE</Method>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+</RESTJSONTestScenario>

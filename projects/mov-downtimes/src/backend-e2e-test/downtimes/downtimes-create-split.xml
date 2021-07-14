@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+-<RESTJSONTestScenario>
+
+    <!-- Split -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Downtime/process</Path>
+        <Method>POST</Method>
+        <Body>{ 
+            "endTime":"2019-10-20T18:05:41.000Z",
+            "startTime":"2019-10-20T18:00:41.000Z",
+            "isSplit":"true",
+            "equipmentId":{ 
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            },
+            "comment":"",
+            "downtimeId": "1"
+        }</Body>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "1"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Downtime/process</Path>
+        <Method>POST</Method>
+        <Body>{ 
+            "endTime":"2019-10-20T18:13:41.000Z",
+            "startTime":"2019-10-20T18:05:41.000Z",
+            "isSplit":"true",
+            "equipmentId":{
+                "id":"Equipment1Test",
+                "type":"EQUIPMENT"
+            }
+        }</Body>
+        <SetVariable name="splitedDowntimeId" JSONPath="uiid"></SetVariable>
+        -<Expected>
+            <StatusCode>200</StatusCode>
+            <JSONPath>messageType = "Success"</JSONPath>
+            <JSONPath>uiid = "[splitedDowntimeId]"</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+
+     <!-- REMOVE SPLITED DOWNTIME -->
+    -<RESTCallJSON>
+        <Path>dottweb/rest/Downtime/remove/[splitedDowntimeId]</Path>
+        <Method>DELETE</Method>
+
+        -<Expected>
+            <StatusCode>200</StatusCode>
+			<JSONPath>messageType = "Information"</JSONPath>
+			<JSONPath>uiid = [splitedDowntimeId]</JSONPath>
+        </Expected>
+    </RESTCallJSON>
+</RESTJSONTestScenario>

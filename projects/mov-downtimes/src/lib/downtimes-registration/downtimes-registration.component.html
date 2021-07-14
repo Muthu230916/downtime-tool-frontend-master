@@ -1,0 +1,175 @@
+<div class="contentwrapper" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+	<div fxFlex="90">
+		<div class="fullWidth">
+			<h1>
+				{{ "LIB_DOWNTIMES_DOWNTIMES" | translate }}
+				<span class="subtitle" *ngIf="selectedLines && selectedLines.length > 0">{{
+					selectedLines.join(", ")
+				}}</span>
+			</h1>
+		</div>
+		<div>
+			<mat-form-field *ngIf="!isLineSetFromUrl">
+				<mat-label>{{ "LIB_DOWNTIMES_SELECT_AN_OPTION" | translate }}</mat-label>
+				<mat-select [(ngModel)]="selectedLines" (ngModelChange)="onSelectChange()" [multiple]="true">
+					<ngx-mat-select-search [(ngModel)]="searchEquipmentClass" [placeholderLabel]="'Find class ...'"
+						[noEntriesFoundLabel]="'no equipment classes found'" name="filterEquipmentClass"></ngx-mat-select-search>
+					<mat-option *ngFor="let line of lines | filter:searchEquipmentClass:'line'" [value]="line">{{ line }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<div class="downtime-container mat-elevation-z8">
+				<div class="downtime-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+					<div class="downtime-rate-limit-reached" *ngIf="isRateLimitReached">
+						{{ "LIB_DOWNTIMES_SERVERS_API_RATE_LIMIT_HAS_BEEN_REACHED" | translate }}.
+					</div>
+				</div>
+
+				<div class="downtime-table-container">
+					<table mat-table [dataSource]="data" class="downtime-table" multiTemplateDataRows>
+						<ng-container matColumnDef="ID">
+							<th mat-header-cell *matHeaderCellDef>ID</th>
+							<td mat-cell *matCellDef="let downtime">{{ downtime.ID }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="WorkCenter">
+							<th mat-header-cell *matHeaderCellDef>WorkCenter</th>
+							<td mat-cell *matCellDef="let downtime">
+								{{ downtime.WorkCenter }}
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Batch">
+							<th mat-header-cell *matHeaderCellDef>Batch</th>
+							<td mat-cell *matCellDef="let downtime">
+								{{ downtime.batch }}
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Order">
+							<th mat-header-cell *matHeaderCellDef>Order</th>
+							<td mat-cell *matCellDef="let downtime">
+								{{ downtime.order }}
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Activity">
+							<th mat-header-cell *matHeaderCellDef>Activity</th>
+							<td mat-cell *matCellDef="let downtime">
+								<mat-card class="badge" [ngClass]="downtime.isDeclared ? 'success' : 'failed'">{{ downtime.Activity }}
+								</mat-card>
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Duration">
+							<th mat-header-cell *matHeaderCellDef>Duration</th>
+							<td mat-cell *matCellDef="let downtime">
+								{{ downtime.Duration }}
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Start">
+							<th mat-header-cell *matHeaderCellDef>Start</th>
+							<td mat-cell *matCellDef="let downtime">
+								{{ downtime.Start | date: "dd/MM/yyyy HH:mm:ss" }}
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Stop">
+							<th mat-header-cell *matHeaderCellDef>Stop</th>
+							<td mat-cell *matCellDef="let downtime">
+								<div *ngIf="downtime.Stop">
+									{{ downtime.Stop | date: "dd/MM/yyyy HH:mm:ss" }}
+								</div>
+								<div *ngIf="!downtime.Stop">
+									<mat-icon style="color: brown;">warning</mat-icon>
+								</div>
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="Team">
+							<th mat-header-cell *matHeaderCellDef>Team</th>
+							<td mat-cell *matCellDef="let downtime">{{ downtime.Team }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="actions">
+							<td mat-footer-cell class="button-wrapper" *matFooterCellDef colspan="7">
+								<button mat-raised-button class="table-button" *ngIf="expandedDowntime && expandedDowntime.Stop"
+									(click)="split(expandedDowntime)">
+									{{ "LIB_DOWNTIMES_SPLIT" | translate }}
+								</button>
+								<button mat-raised-button class="table-button" *ngIf="
+										expandedDowntime &&
+										!expandedDowntime.isDeclared &&
+										expandedDowntime.Stop
+									" color="primary" (click)="declare(expandedDowntime)">
+									{{ "LIB_DOWNTIMES_DECLARE" | translate }}
+								</button>
+								<button mat-raised-button class="table-button" *ngIf="expandedDowntime && expandedDowntime.isDeclared"
+									color="warn" (click)="undeclare()">
+									{{ "LIB_DOWNTIMES_UNDECLARE" | translate }}
+								</button>
+								<mat-paginator #paginator [showFirstLastButtons]="true" [length]="resultsLength" [pageSize]="8"
+									[pageSizeOptions]="[5, 8, 10, 25, 50, 100]"></mat-paginator>
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="expandedDetail">
+							<td mat-cell *matCellDef="let downtime" [attr.colspan]="displayedColumns.length">
+								<div class="downtime-element-detail" [@detailExpand]="
+										downtime == expandedDowntime ? 'expanded' : 'collapsed'
+									">
+									<div class="downtime-element-diagram">
+										<div class="downtime-element-title">
+											{{ "LIB_DOWNTIMES_CAUSE" | translate }}
+										</div>
+										<div class="downtime-element-description">
+											{{ downtime.causeName }}
+										</div>
+									</div>
+									<div class="downtime-element-diagram">
+										<div class="downtime-element-title">
+											{{ "LIB_DOWNTIMES_SOLUTION" | translate }}
+										</div>
+										<div class="downtime-element-description">
+											{{ downtime.solutionName }}
+										</div>
+									</div>
+									<!-- <div class="downtime-element-diagram">
+										<div class="downtime-element-title">
+											{{ "LIB_DOWNTIMES_COMMENT" | translate }}
+										</div>
+										<div class="downtime-element-description">
+											{{ downtime.comment }}
+										</div>
+									</div> -->
+									<div class="downtime-element-diagram">
+										<div class="downtime-element-title">
+											{{ "LIB_DOWNTIMES_FULL_ACTIVITY" | translate }}
+										</div>
+										<div class="downtime-element-description">
+											<lib-downtimes-breadcrumbs [lastBreadcrumbName]="downtime.Activity" [breadcrumbs]="
+													activitiesForEquipment.get(downtime.WorkCenter)
+												"></lib-downtimes-breadcrumbs>
+										</div>
+									</div>
+								</div>
+							</td>
+						</ng-container>
+
+						<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+						<tr mat-row *matRowDef="let downtime; columns: displayedColumns" class="downtime-element-row"
+							[class.downtime-expanded-row]="expandedDowntime === downtime" (click)="
+								expandedDowntime = expandedDowntime === downtime ? null : downtime
+							"></tr>
+						<tr mat-footer-row *matFooterRowDef="['actions']; sticky: true" class="example-second-footer-row"></tr>
+						<tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="downtime-detail-row"></tr>
+					</table>
+				</div>
+			</div>
+			<div *ngIf="!selectedLines">
+				{{ "LIB_DOWNTIMES_PLEASE_SELECT_A_LINE" | translate }}
+			</div>
+		</div>
+	</div>
+</div>
